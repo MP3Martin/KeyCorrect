@@ -47,9 +47,9 @@ namespace KeyboardIntercept {
                             new Rows(
                                 panel,
                                 new Markup(" "),
-                                new Markup("[gold3]Press [magenta3]PageUp[/] to toggle [lightskyblue1]Intercept writing[/].[/]"),
+                                new Markup("[gold3]Press [magenta2]PageUp[/] to toggle [lightskyblue1]Intercept writing[/].[/]"),
                                 new Markup(" "),
-                                new Markup("[gold3]Press [magenta3]X[/] or [magenta3]Q[/] to [lightskyblue1]Stop[/] the program.[/]")
+                                new Markup("[gold3]Press [magenta2]X[/] or [magenta2]Q[/] to [lightskyblue1]Stop[/] the program.[/]")
                             )
                         );
                         ctx.Refresh();
