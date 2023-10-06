@@ -42,9 +42,12 @@ namespace KeyboardIntercept {
                 alphabetNums.Add(i);
             }
 
+            // create a list of keycodes that represent the simple alphabet
             foreach (int num in alphabetNums) {
                 alphabetKeyCodes.Add((KeyCode)num);
             }
+
+            alphabetNums = null;
 
             async void typeNextChar() {
                 string codeToPress = MainStatus.textToWrite.Substring(0, 1);
@@ -102,8 +105,8 @@ namespace KeyboardIntercept {
                 });
 
                 // Create a timer to get clipboard
-                System.Timers.Timer myTimer = new System.Timers.Timer();
-                myTimer.Elapsed += new ElapsedEventHandler((object source, ElapsedEventArgs e) => {
+                System.Timers.Timer getClipboardTimer = new System.Timers.Timer();
+                getClipboardTimer.Elapsed += new ElapsedEventHandler((object source, ElapsedEventArgs e) => {
                     if (MainStatus.active) {
                         return;
                     }
@@ -111,8 +114,8 @@ namespace KeyboardIntercept {
                     string clipboardText = GetClipboardData();
                     MainStatus.textToWrite = clipboardText;
                 });
-                myTimer.Interval = 50;
-                myTimer.Enabled = true;
+                getClipboardTimer.Interval = 200;
+                getClipboardTimer.Enabled = true;
 
 
 
@@ -146,7 +149,7 @@ namespace KeyboardIntercept {
                         }
                     }
 
-                    //keyStroke.Code = KeyCode.LeftShift;
+                    // cancel real keypress
                     keyStroke.State = KeyState.Up;
                 } else {
                     // if the pressed key is in standard alphabet
