@@ -72,30 +72,30 @@ namespace KeyboardIntercept {
                             textToWrite = textToWrite.Substring(0, MAX_SHOWN_TEXT_TO_WRITE_LEN - 3) + "...";
                         }
                         var panel = new Spectre.Console.Panel(new Rows(
-                                                                                        new Markup($"[gold3]Intercept writing:[/] " +
-                                                                                        $"[{(MainStatus.active ? "green" : "red")}]{(MainStatus.active ? "active" : "inactive")}[/]"),
-                                                                                        new Markup($"[gold3]Text to write:[/] [darkorange]{textToWrite.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵")}[/]")
-                                                                        ));
+                            new Markup($"[gold3]Intercept writing:[/] " +
+                            $"[{(MainStatus.active ? "green" : "red")}]{(MainStatus.active ? "active" : "inactive")}[/]"),
+                            new Markup($"[gold3]Text to write:[/] [darkorange]{textToWrite.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵")}[/]")
+                        ));
                         panel.Header = new PanelHeader("[blue]Status[/]");
                         panel.Border = BoxBorder.Rounded;
                         panel.BorderStyle = new Style(Spectre.Console.Color.DarkCyan);
                         //panel.Expand();
                         panel.Width = 70;
                         ctx.UpdateTarget(
-                                                                                        new Rows(
-                                                                                                        panel,
-                                                                                                        new Markup(" "),
-                                                                                                        new Markup("[darkslategray2]Info: [/][lightsalmon3_1]When you enable [lightskyblue1]Intercept " +
-                                                                                                        $"writing[/], this program will get your clipboard contents.\nIt will type the next correct " +
-                                                                                                        $"symbol when you press any letter.[/]"),
-                                                                                                        new Markup(" "),
-                                                                                                        new Markup("[gold3]Press [magenta2]PageUp[/] to toggle [lightskyblue1]Intercept " +
-                                                                                                        $"writing[/].[/]"),
-                                                                                                        new Markup(" "),
-                                                                                                        new Markup("[gold3]Press [magenta2]X[/] or [magenta2]Q[/] to " +
-                                                                                                        $"[lightskyblue1]Stop[/] the program.[/]")
-                                                                                        )
-                                                                        );
+                            new Rows(
+                                panel,
+                                new Markup(" "),
+                                new Markup("[darkslategray2]Info: [/][lightsalmon3_1]When you enable [lightskyblue1]Intercept " +
+                                $"writing[/], this program will get your clipboard contents.\nIt will type the next correct " +
+                                $"symbol when you press any letter.[/]"),
+                                new Markup(" "),
+                                new Markup("[gold3]Press [magenta2]PageUp[/] to toggle [lightskyblue1]Intercept " +
+                                $"writing[/].[/]"),
+                                new Markup(" "),
+                                new Markup("[gold3]Press [magenta2]X[/] or [magenta2]Q[/] to " +
+                                $"[lightskyblue1]Stop[/] the program.[/]")
+                            )
+                        );
                         ctx.Refresh();
                         await Task.Delay(10);
                     }
@@ -137,28 +137,28 @@ namespace KeyboardIntercept {
                         keyStroke.State = KeyState.Down;
                     }
 
-                    keyStroke.Code = KeyCode.LeftShift;
-                    MainStatus.keyboardHook.SetKeyState(KeyCode.LeftShift, KeyState.Up);
                     // Check if the key is released
                     if (keyStroke.State == KeyState.Up) {
+                        // toggle active state
                         MainStatus.active = !MainStatus.active;
                         if (MainStatus.active) {
                             // nothing needed
                         }
                     }
+
+                    //keyStroke.Code = KeyCode.LeftShift;
+                    keyStroke.State = KeyState.Up;
                 } else {
                     // if the pressed key is in standard alphabet
                     foreach (KeyCode keyCode in alphabetKeyCodes) {
                         if (keyCode == keyStroke.Code && MainStatus.active && keyStroke.State == KeyState.Down && MainStatus.textToWrite.Length > 0) {
                             // cancel real keypress
-                            keyStroke.Code = KeyCode.LeftShift;
-                            MainStatus.keyboardHook.SetKeyState(KeyCode.LeftShift, KeyState.Up);
+                            keyStroke.State = KeyState.Up;
                             // type the next correct character
                             typeNextChar();
                         } else if (MainStatus.textToWrite.Length == 0) {
                             // cancel the keypress if done writing
-                            keyStroke.Code = KeyCode.LeftShift;
-                            MainStatus.keyboardHook.SetKeyState(KeyCode.LeftShift, KeyState.Up);
+                            keyStroke.State = KeyState.Up;
                         }
                     }
                 }
@@ -195,17 +195,17 @@ namespace KeyboardIntercept {
                     string clipboardData = null;
                     Exception threadEx = null;
                     Thread staThread = new Thread(
-                                                    delegate () {
-                                                        try {
-                                                            if (Clipboard.ContainsText(TextDataFormat.Text)) {
-                                                                clipboardData = Clipboard.GetText(TextDataFormat.Text);
-                                                            } else {
-                                                                clipboardData = "";
-                                                            }
-                                                        } catch (Exception ex) {
-                                                            threadEx = ex;
-                                                        }
-                                                    });
+                        delegate () {
+                            try {
+                                if (Clipboard.ContainsText(TextDataFormat.Text)) {
+                                    clipboardData = Clipboard.GetText(TextDataFormat.Text);
+                                } else {
+                                    clipboardData = "";
+                                }
+                            } catch (Exception ex) {
+                                threadEx = ex;
+                            }
+                        });
                     staThread.SetApartmentState(ApartmentState.STA);
                     staThread.Start();
                     staThread.Join();
