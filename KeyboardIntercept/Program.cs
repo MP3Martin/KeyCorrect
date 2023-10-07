@@ -79,8 +79,7 @@ namespace KeyboardIntercept {
                             textToWrite = textToWrite.Substring(0, MAX_SHOWN_TEXT_TO_WRITE_LEN - 3) + "...";
                         }
 
-                        string textToWriteEscaped = escapeString(MainStatus.textToWrite);
-                        string textToWriteStableEscaped = escapeString(MainStatus.textToWriteStable);
+                        string textToWriteStableEscaped = escapeString(textToWrite);
                         // calculate how much of the text was already written
                         int textWrittenLen = MainStatus.textToWriteStable.Length - MainStatus.textToWrite.Length;
                         string textToWriteLeftPart = $"{textToWriteStableEscaped[..textWrittenLen]}";
