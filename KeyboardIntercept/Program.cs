@@ -49,6 +49,10 @@ namespace KeyboardIntercept {
 
             alphabetNums = null;
 
+            string escapeString(string str) {
+                return str.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵").Replace("	", "⭾");
+            }
+
             async void typeNextChar() {
                 string codeToPress = MainStatus.textToWrite.Substring(0, 1);
                 MainStatus.keyboardHook.SimulateInput(codeToPress.Replace("z", "¨§§§ů").Replace("y", "z").Replace("§§§ů", "y"));
@@ -74,10 +78,18 @@ namespace KeyboardIntercept {
                         if (textToWrite.Length > MAX_SHOWN_TEXT_TO_WRITE_LEN) {
                             textToWrite = textToWrite.Substring(0, MAX_SHOWN_TEXT_TO_WRITE_LEN - 3) + "...";
                         }
+
+                        string textToWriteEscaped = escapeString(MainStatus.textToWrite);
+                        string textToWriteStableEscaped = escapeString(MainStatus.textToWriteStable);
+                        // calculate how much of the text was already written
+                        int textWrittenLen = MainStatus.textToWriteStable.Length - MainStatus.textToWrite.Length;
+                        string textToWriteLeftPart = $"{textToWriteStableEscaped[..textWrittenLen]}";
+                        string textToWriteRightPart = $"{textToWriteStableEscaped[textWrittenLen..]}";
+
                         var panel = new Spectre.Console.Panel(new Rows(
                             new Markup($"[gold3]Intercept writing:[/] " +
                             $"[{(MainStatus.active ? "green" : "red")}]{(MainStatus.active ? "active" : "inactive")}[/]"),
-                            new Markup($"[gold3]Text to write:[/] [darkorange]{textToWrite.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵")}[/]")
+                            new Markup($"[gold3]Text to write:[/] [#9a6f32]{textToWriteLeftPart}[/][darkorange]{textToWriteRightPart}[/]")
                         ));
                         panel.Header = new PanelHeader("[blue]Status[/]");
                         panel.Border = BoxBorder.Rounded;
