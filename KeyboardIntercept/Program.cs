@@ -29,7 +29,7 @@ namespace KeyboardIntercept {
         [STAThread]
         public static void Main(string[] args) {
             Console.OutputEncoding = Encoding.UTF8;
-            List<int> alphabetNums = new List<int> { 28, 57 };
+            List<int>? alphabetNums = new List<int> { 28, 57 };
             List<KeyCode> alphabetKeyCodes = new();
 
             for (int i = 16; i <= 25; i++) {
@@ -56,7 +56,7 @@ namespace KeyboardIntercept {
             async void typeNextChar() {
                 string codeToPress = MainStatus.textToWrite.Substring(0, 1);
                 MainStatus.keyboardHook.SimulateInput(codeToPress.Replace("z", "¨§§§ů").Replace("y", "z").Replace("§§§ů", "y"));
-                MainStatus.textToWrite = MainStatus.textToWrite.Substring(1, MainStatus.textToWrite.Length - 1);
+                MainStatus.textToWrite = MainStatus.textToWrite[1..];
                 MainStatus.keyboardHook.SetKeyState(KeyCode.LeftShift, KeyState.Up);
             }
 
@@ -161,18 +161,18 @@ namespace KeyboardIntercept {
                     }
 
                     // cancel real keypress
-                    keyStroke.State = KeyState.Up;
+                    keyStroke.Code = new KeyCode();
                 } else {
                     // if the pressed key is in standard alphabet
                     foreach (KeyCode keyCode in alphabetKeyCodes) {
                         if (keyCode == keyStroke.Code && MainStatus.active && keyStroke.State == KeyState.Down && MainStatus.textToWrite.Length > 0) {
                             // cancel real keypress
-                            keyStroke.State = KeyState.Up;
+                            keyStroke.Code = new KeyCode();
                             // type the next correct character
                             typeNextChar();
                         } else if (MainStatus.textToWrite.Length == 0) {
                             // cancel the keypress if done writing
-                            keyStroke.State = KeyState.Up;
+                            keyStroke.Code = new KeyCode();
                         }
                     }
                 }
