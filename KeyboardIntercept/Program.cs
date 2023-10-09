@@ -27,6 +27,8 @@ namespace KeyboardIntercept {
 
             public static bool ignoreAllKeyPressesButStillSendThem = false;
 
+            public static bool stopUpdatingText = false;
+
         }
         [STAThread]
         public static void Main(string[] args) {
@@ -113,6 +115,10 @@ namespace KeyboardIntercept {
                 AnsiConsole.Live(new Markup("Loading..."))
                 .StartAsync(async ctx => {
                     while (true) {
+                        if (MainStatus.stopUpdatingText) {
+                            Console.Clear();
+                            return;
+                        }
                         const int MAX_SHOWN_TEXT_TO_WRITE_LEN = 60;
                         string textToWrite = MainStatus.textToWriteStable;
                         if (textToWrite.Length > MAX_SHOWN_TEXT_TO_WRITE_LEN) {
@@ -193,11 +199,16 @@ namespace KeyboardIntercept {
                     Key = Console.ReadKey(true).KeyChar;
                 }
                 MainStatus.keyboardHook.Dispose();
+                Console.Clear();
             } else {
                 InstallDriver();
             }
 
-            Console.WriteLine("\nProgram ended.");
+            MainStatus.stopUpdatingText = true;
+            Thread.Sleep(100);
+            Console.Clear();
+            Console.WriteLine("\nProgram ended. Press any key to close this window.");
+            Console.ReadKey(true);
 
             bool KeyboardCallback(ref KeyStroke keyStroke) {
                 //Console.WriteLine($"{keyStroke.Code} {keyStroke.State} {keyStroke.Information}");
