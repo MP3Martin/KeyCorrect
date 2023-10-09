@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="InputInterceptor" Version="2.2.0" />
+    <PackageReference Include="MP3Martin.InputInterceptor.PersonalFork" Version="1.0.1" />
     <PackageReference Include="Spectre.Console" Version="0.47.0" />
   </ItemGroup>
 

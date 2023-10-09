@@ -23,15 +23,35 @@ namespace KeyboardIntercept {
             public static string textToWriteStable = "";
 
 
-            public static KeyboardHook keyboardHook = null;
+            public static KeyboardHook keyboardHook;
+
+            public static bool ignoreAllKeyPressesButStillSendThem = false;
 
         }
         [STAThread]
         public static void Main(string[] args) {
+            // start of init
             Console.OutputEncoding = Encoding.UTF8;
-            List<int>? alphabetNums = new List<int> { 28, 57 };
             List<KeyCode> alphabetKeyCodes = new();
 
+            string fixCzechKeyboardKeys(string input) {
+                if (Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToLower() == "cs") {
+                    input = input.Replace("z", "ㅁ").Replace("y", "z").Replace("ㅁ", "y");
+                    input = input.Replace("Z", "ㅁ").Replace("Y", "Z").Replace("ㅁ", "Y");
+                }
+                return input;
+            }
+
+            bool keyCodeInAlphabet(KeyStroke keyStroke) {
+                foreach (KeyCode keyCode in alphabetKeyCodes) {
+                    if (keyCode == keyStroke.Code) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            List<int>? alphabetNums = new List<int> { 28, 57 };
             for (int i = 16; i <= 25; i++) {
                 alphabetNums.Add(i);
             }
@@ -49,59 +69,98 @@ namespace KeyboardIntercept {
 
             alphabetNums = null;
 
+            List<string> alphabetCharactersAndMoreAsString = new();
+            foreach (int index in Enumerable.Range(97, 122 - 97 + 1)) {
+                alphabetCharactersAndMoreAsString.Add(((char)index).ToString());
+            }
+            foreach (int index in Enumerable.Range(65, 90 - 65 + 1)) {
+                alphabetCharactersAndMoreAsString.Add(((char)index).ToString());
+            }
+            foreach (string symbol in new List<string> { ".", ",", " " }) {
+                alphabetCharactersAndMoreAsString.Add(symbol);
+            }
+
+            // end of init
+
+            // start of methods
             string escapeString(string str) {
                 return str.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵").Replace("	", "⭾");
             }
 
+            bool doesStringOnlyContainStandardLowercaseLetters(string input) {
+                foreach (string character in alphabetCharactersAndMoreAsString) {
+                    input = input.Replace(character, "");
+                }
+                return (input == "");
+            }
+
             async void typeNextChar() {
                 string codeToPress = MainStatus.textToWrite.Substring(0, 1);
-                MainStatus.keyboardHook.SimulateInput(codeToPress.Replace("z", "¨§§§ů").Replace("y", "z").Replace("§§§ů", "y"));
+                MainStatus.ignoreAllKeyPressesButStillSendThem = true;
+                MainStatus.keyboardHook.SimulateInput(fixCzechKeyboardKeys(codeToPress));
+                MainStatus.ignoreAllKeyPressesButStillSendThem = false;
                 MainStatus.textToWrite = MainStatus.textToWrite[1..];
-                MainStatus.keyboardHook.SetKeyState(KeyCode.LeftShift, KeyState.Up);
             }
+
+            // end of methods
 
             if (InitializeDriver()) {
                 // create hooks
                 MainStatus.keyboardHook = new KeyboardHook(KeyboardCallback);
-                //Console.WriteLine("Hooks enabled. Press any key to release.");
-
-                char Key = '-';
-
 
                 // create live updating console text
                 Console.Clear();
                 AnsiConsole.Live(new Markup("Loading..."))
                 .StartAsync(async ctx => {
                     while (true) {
-                        const int MAX_SHOWN_TEXT_TO_WRITE_LEN = 50;
+                        const int MAX_SHOWN_TEXT_TO_WRITE_LEN = 60;
                         string textToWrite = MainStatus.textToWriteStable;
                         if (textToWrite.Length > MAX_SHOWN_TEXT_TO_WRITE_LEN) {
                             textToWrite = textToWrite.Substring(0, MAX_SHOWN_TEXT_TO_WRITE_LEN - 3) + "...";
                         }
 
+                        Markup unsupportedCharWarning() {
+                            if (!doesStringOnlyContainStandardLowercaseLetters(MainStatus.textToWriteStable)) {
+                                return new Markup("[gold3]Warning:[/] [indianred1]This program only supports typing english " +
+                                "letters\nand most basic punctuation marks![/]");
+                            }
+                            return new Markup("");
+                        }
+
                         string textToWriteStableEscaped = escapeString(textToWrite);
                         // calculate how much of the text was already written
                         int textWrittenLen = MainStatus.textToWriteStable.Length - MainStatus.textToWrite.Length;
-                        string textToWriteLeftPart = $"{textToWriteStableEscaped[..textWrittenLen]}";
-                        string textToWriteRightPart = $"{textToWriteStableEscaped[textWrittenLen..]}";
+                        string textToWriteLeftPart;
+                        string textToWriteRightPart;
+                        try {
+                            textToWriteLeftPart = $"{textToWriteStableEscaped[..textWrittenLen]}";
+                        } catch (Exception) {
+                            textToWriteLeftPart = textToWriteStableEscaped;
+                        }
+                        try {
+                            textToWriteRightPart = $"{textToWriteStableEscaped[textWrittenLen..]}";
+                        } catch (Exception) {
+                            textToWriteRightPart = "";
+                        }
 
                         var panel = new Spectre.Console.Panel(new Rows(
                             new Markup($"[gold3]Intercept writing:[/] " +
                             $"[{(MainStatus.active ? "green" : "red")}]{(MainStatus.active ? "active" : "inactive")}[/]"),
-                            new Markup($"[gold3]Text to write:[/] [#9a6f32]{textToWriteLeftPart}[/][darkorange]{textToWriteRightPart}[/]")
+                            new Markup($"[gold3]Text to write:[/] [#9a6f32]{textToWriteLeftPart}[/][darkorange]{textToWriteRightPart}[/]"),
+                            new Markup(""),
+                            unsupportedCharWarning()
                         ));
                         panel.Header = new PanelHeader("[blue]Status[/]");
                         panel.Border = BoxBorder.Rounded;
                         panel.BorderStyle = new Style(Spectre.Console.Color.DarkCyan);
-                        //panel.Expand();
-                        panel.Width = 70;
+                        panel.Width = MAX_SHOWN_TEXT_TO_WRITE_LEN + 20;
                         ctx.UpdateTarget(
                             new Rows(
                                 panel,
                                 new Markup(" "),
                                 new Markup("[darkslategray2]Info: [/][lightsalmon3_1]When you enable [lightskyblue1]Intercept " +
-                                $"writing[/], this program will get your clipboard contents.\nIt will type the next correct " +
-                                $"symbol when you press any letter.[/]"),
+                                $"writing[/], this program will get your clipboard contents. It will type\nthe next correct " +
+                                $"letter from your clipboard when you press any letter found in standard english alphabet.[/]"),
                                 new Markup(" "),
                                 new Markup("[gold3]Press [magenta2]PageUp[/] to toggle [lightskyblue1]Intercept " +
                                 $"writing[/].[/]"),
@@ -128,8 +187,8 @@ namespace KeyboardIntercept {
                 getClipboardTimer.Interval = 200;
                 getClipboardTimer.Enabled = true;
 
-
-
+                // loop until key to exit is pressed
+                char Key = '-';
                 while (!(Char.ToLower(Key) == 'q' || Char.ToLower(Key) == 'x')) {
                     Key = Console.ReadKey(true).KeyChar;
                 }
@@ -138,10 +197,13 @@ namespace KeyboardIntercept {
                 InstallDriver();
             }
 
-            Console.WriteLine("Program ended.");
+            Console.WriteLine("\nProgram ended.");
 
-            void KeyboardCallback(ref KeyStroke keyStroke) {
+            bool KeyboardCallback(ref KeyStroke keyStroke) {
                 //Console.WriteLine($"{keyStroke.Code} {keyStroke.State} {keyStroke.Information}");
+                if (MainStatus.ignoreAllKeyPressesButStillSendThem) {
+                    return true;
+                }
                 // Check if pageUp is pressed
                 if (keyStroke.Code == KeyCode.Numpad9 && (keyStroke.State == KeyState.E0 || keyStroke.State == (KeyState.E0 | KeyState.Up))) {
                     // Fix issues with pageUp being special key
@@ -161,21 +223,33 @@ namespace KeyboardIntercept {
                     }
 
                     // cancel real keypress
-                    keyStroke.Code = new KeyCode();
+                    return false;
                 } else {
-                    // if the pressed key is in standard alphabet
-                    foreach (KeyCode keyCode in alphabetKeyCodes) {
-                        if (keyCode == keyStroke.Code && MainStatus.active && keyStroke.State == KeyState.Down && MainStatus.textToWrite.Length > 0) {
-                            // cancel real keypress
-                            keyStroke.Code = new KeyCode();
+                    if (keyCodeInAlphabet(keyStroke)) {
+                        // if the pressed key is in standard alphabet
+
+                        if (MainStatus.active && keyStroke.State == KeyState.Down && MainStatus.textToWrite.Length > 0) {
                             // type the next correct character
                             typeNextChar();
-                        } else if (MainStatus.textToWrite.Length == 0) {
-                            // cancel the keypress if done writing
-                            keyStroke.Code = new KeyCode();
+                            // cancel real keypress
+                            return false;
+                        }
+                    } else if (MainStatus.active) {
+                        // interception is active but the key pressed was not in standard english alphabet
+                        switch (keyStroke.Code) {
+                            case KeyCode.LeftWindowsKey or KeyCode.RightWindowsKey or KeyCode.Alt or KeyCode.Tab or
+                            KeyCode.Control or KeyCode.LeftShift or KeyCode.RightShift or KeyCode.Delete:
+                                return true;
+                            default:
+                                return false;
                         }
                     }
                 }
+                if (MainStatus.textToWrite.Length <= 0 && MainStatus.active) {
+                    // cancel the keypress if done writing
+                    return false;
+                }
+                return true;
             }
 
             Boolean InitializeDriver() {
