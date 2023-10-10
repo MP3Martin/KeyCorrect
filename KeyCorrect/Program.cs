@@ -48,7 +48,6 @@ namespace KeyCorrect {
             internal static bool ShouldClearConsole = false;
 
         }
-        [STAThread]
         public static void Main(string[] args) {
             Init.Run();
 
