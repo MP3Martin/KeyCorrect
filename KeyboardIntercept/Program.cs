@@ -39,7 +39,6 @@ namespace KeyboardIntercept {
 
             Init.Run();
 
-
             if (InitializeDriver()) {
                 // create hooks
                 MainStatus.keyboardHook = new KeyboardHook(KeyboardCallback);
