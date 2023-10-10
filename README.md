@@ -1,5 +1,6 @@
 # KeyCorrect
-Intercept keyboard with correct characters
+Intercept keyboard with correct characters<br><br>
+![image](https://github.com/MP3Martin/KeyCorrect/assets/60501493/b4f1759d-5a75-40f5-873f-9f339e26eaf6)
 
 ## Info
 - My first .NET project
