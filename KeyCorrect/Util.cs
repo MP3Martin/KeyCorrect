@@ -4,26 +4,26 @@ using static KeyCorrect.Program;
 
 namespace KeyCorrect {
     internal static class Util {
-        internal static string escapeString(string str) {
+        internal static string EscapeString(string str) {
             return str.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵").Replace("	", "⭾");
         }
 
-        internal static bool doesStringOnlyContainStandardLowercaseLetters(string input) {
-            foreach (string character in alphabetCharactersAndMoreAsString) {
+        internal static bool DoesStringOnlyContainStandardLowercaseLetters(string input) {
+            foreach (string character in AlphabetCharactersAndMoreAsString) {
                 input = input.Replace(character, "");
             }
             return (input == "");
         }
 
-        internal static async void typeNextChar() {
-            string codeToPress = MainStatus.textToWrite.Substring(0, 1);
-            MainStatus.ignoreAllKeyPressesButStillSendThem = true;
-            MainStatus.keyboardHook.SimulateInput(fixCzechKeyboardKeys(codeToPress));
-            MainStatus.ignoreAllKeyPressesButStillSendThem = false;
-            MainStatus.textToWrite = MainStatus.textToWrite[1..];
+        internal static async void TypeNextChar() {
+            string codeToPress = MainStatus.TextToWrite.Substring(0, 1);
+            MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
+            MainStatus.KeyboardHook.SimulateInput(FixCzechKeyboardKeys(codeToPress));
+            MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
+            MainStatus.TextToWrite = MainStatus.TextToWrite[1..];
         }
 
-        internal static string fixCzechKeyboardKeys(string input) {
+        internal static string FixCzechKeyboardKeys(string input) {
             if (Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToLower() == "cs") {
                 input = input.Replace("z", "ㅁ").Replace("y", "z").Replace("ㅁ", "y");
                 input = input.Replace("Z", "ㅁ").Replace("Y", "Z").Replace("ㅁ", "Y");
@@ -31,9 +31,9 @@ namespace KeyCorrect {
             return input;
         }
 
-        internal static bool keyCodeInAlphabet(KeyStroke keyStroke) {
-            foreach (KeyCode keyCode in alphabetKeyCodes) {
-                if (keyCode == keyStroke.Code) {
+        internal static bool KeyCodeInAlphabet(KeyStroke keyStroke) {
+            foreach (KeyCode KeyCode in AlphabetKeyCodes) {
+                if (KeyCode == keyStroke.Code) {
                     return true;
                 }
             }

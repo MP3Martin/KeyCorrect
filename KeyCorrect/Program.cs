@@ -1,19 +1,33 @@
-﻿using InputInterceptorNS;
+﻿using System.Runtime.InteropServices;
+using InputInterceptorNS;
 using Spectre.Console;
 using static KeyCorrect.Util;
 
 namespace KeyCorrect {
     internal static class Program {
-        internal static List<string> alphabetCharactersAndMoreAsString = new();
-        internal static List<KeyCode> alphabetKeyCodes = new();
+        internal static List<string> AlphabetCharactersAndMoreAsString = new();
+        internal static List<KeyCode> AlphabetKeyCodes = new();
+
+        // start of api import
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        public const uint SWP_NOSIZE = 0x0001;
+        public const uint SWP_NOMOVE = 0x0002;
+        public const uint SWP_SHOWWINDOW = 0x0040;
+        // end of api import
 
         internal static class MainStatus {
-            internal static bool active = false;
-            internal static string textToWrite {
+            internal const string VERSION = "1.0.0";
+            internal static bool Active = false;
+            internal static string TextToWrite {
                 set {
                     _textToWrite = value;
-                    if (!active) {
-                        textToWriteStable = value;
+                    if (!Active) {
+                        TextToWriteStable = value;
                     }
                 }
                 get { return _textToWrite; }
@@ -22,53 +36,52 @@ namespace KeyCorrect {
             /// <summary>
             /// Like textToWrite but ony updates when active is False
             /// </summary>
-            internal static string textToWriteStable = "";
+            internal static string TextToWriteStable = "";
 
 
-            internal static KeyboardHook keyboardHook;
+            internal static KeyboardHook KeyboardHook;
 
-            internal static bool ignoreAllKeyPressesButStillSendThem = false;
+            internal static bool IgnoreAllKeyPressesButStillSendThem = false;
 
-            internal static bool stopUpdatingText = false;
+            internal static bool StopUpdatingText = false;
 
-            internal static bool shouldClearConsole = false;
+            internal static bool ShouldClearConsole = false;
 
         }
         [STAThread]
         public static void Main(string[] args) {
-
             Init.Run();
 
             if (InitializeDriver()) {
                 // create hooks
-                MainStatus.keyboardHook = new KeyboardHook(KeyboardCallback);
+                MainStatus.KeyboardHook = new KeyboardHook(KeyboardCallback);
 
                 // create live updating console text
                 Console.Clear();
                 AnsiConsole.Live(new Markup("Loading..."))
                 .StartAsync(async ctx => {
                     while (true) {
-                        if (MainStatus.stopUpdatingText) {
+                        if (MainStatus.StopUpdatingText) {
                             Console.Clear();
                             return;
                         }
                         const int MAX_SHOWN_TEXT_TO_WRITE_LEN = 60;
-                        string textToWrite = MainStatus.textToWriteStable;
+                        string textToWrite = MainStatus.TextToWriteStable;
                         if (textToWrite.Length > MAX_SHOWN_TEXT_TO_WRITE_LEN) {
                             textToWrite = textToWrite.Substring(0, MAX_SHOWN_TEXT_TO_WRITE_LEN - 3) + "...";
                         }
 
                         Markup unsupportedCharWarning() {
-                            if (!doesStringOnlyContainStandardLowercaseLetters(MainStatus.textToWriteStable)) {
+                            if (!DoesStringOnlyContainStandardLowercaseLetters(MainStatus.TextToWriteStable)) {
                                 return new Markup("[gold3]Warning:[/] [indianred1]This program only supports typing english " +
                                 "letters\nand most basic punctuation marks![/]");
                             }
                             return new Markup("");
                         }
 
-                        string textToWriteStableEscaped = escapeString(textToWrite);
+                        string textToWriteStableEscaped = EscapeString(textToWrite);
                         // calculate how much of the text was already written
-                        int textWrittenLen = MainStatus.textToWriteStable.Length - MainStatus.textToWrite.Length;
+                        int textWrittenLen = MainStatus.TextToWriteStable.Length - MainStatus.TextToWrite.Length;
                         string textToWriteLeftPart;
                         string textToWriteRightPart;
                         try {
@@ -84,7 +97,7 @@ namespace KeyCorrect {
 
                         var panel = new Spectre.Console.Panel(new Rows(
                             new Markup($"[gold3]Intercept writing:[/] " +
-                            $"[{(MainStatus.active ? "green" : "red")}]{(MainStatus.active ? "active" : "inactive")}[/]"),
+                            $"[{(MainStatus.Active ? "green" : "red")}]{(MainStatus.Active ? "active" : "inactive")}[/]"),
                             new Markup($"[gold3]Text to write:[/] [#9a6f32]{textToWriteLeftPart}[/][darkorange]{textToWriteRightPart}[/]"),
                             new Markup(""),
                             unsupportedCharWarning()
@@ -104,8 +117,8 @@ namespace KeyCorrect {
                                 new Markup("[gold3]Press [magenta2]PageUp[/] to toggle [lightskyblue1]Intercept " +
                                 $"writing[/].[/]"),
                                 new Markup(" "),
-                                new Markup("[gold3]Press [magenta2]X[/] or [magenta2]Q[/] to " +
-                                $"[lightskyblue1]Stop[/] the program.[/]")
+                                new Markup("[gold3]Press [magenta2]X[/] or [magenta2]Q[/] while this " +
+                                $"window is active to [lightskyblue1]Stop[/] the program.[/]")
                             )
                         );
                         ctx.Refresh();
@@ -116,7 +129,7 @@ namespace KeyCorrect {
                 // Create a timer to get clipboard
                 System.Timers.Timer getClipboardTimer = new System.Timers.Timer();
                 getClipboardTimer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
-                    if (MainStatus.active) {
+                    if (MainStatus.Active) {
                         return;
                     }
                     string clipboardText = TextCopy.ClipboardService.GetText();
@@ -127,7 +140,7 @@ namespace KeyCorrect {
                     } catch (Exception ex) {
                         clipboardText = string.Empty;
                     }
-                    MainStatus.textToWrite = clipboardText;
+                    MainStatus.TextToWrite = clipboardText;
                 });
                 getClipboardTimer.Interval = 200;
                 getClipboardTimer.Enabled = true;
@@ -137,16 +150,16 @@ namespace KeyCorrect {
                 while (!(Char.ToLower(Key) == 'q' || Char.ToLower(Key) == 'x')) {
                     Key = Console.ReadKey(true).KeyChar;
                 }
-                MainStatus.keyboardHook.Dispose();
-                MainStatus.shouldClearConsole = true;
+                MainStatus.KeyboardHook.Dispose();
+                MainStatus.ShouldClearConsole = true;
                 Console.Clear();
             } else {
                 InstallDriver();
             }
 
-            MainStatus.stopUpdatingText = true;
+            MainStatus.StopUpdatingText = true;
             Thread.Sleep(100);
-            if (MainStatus.shouldClearConsole) {
+            if (MainStatus.ShouldClearConsole) {
                 Console.Clear();
             }
             Console.WriteLine("\nProgram ended. Press any key to close this window.");
@@ -154,7 +167,7 @@ namespace KeyCorrect {
 
             bool KeyboardCallback(ref KeyStroke keyStroke) {
                 //Console.WriteLine($"{keyStroke.Code} {keyStroke.State} {keyStroke.Information}");
-                if (MainStatus.ignoreAllKeyPressesButStillSendThem) {
+                if (MainStatus.IgnoreAllKeyPressesButStillSendThem) {
                     return true;
                 }
                 // Check if pageUp is pressed
@@ -169,8 +182,8 @@ namespace KeyCorrect {
                     // Check if the key is released
                     if (keyStroke.State == KeyState.Up) {
                         // toggle active state
-                        MainStatus.active = !MainStatus.active;
-                        if (MainStatus.active) {
+                        MainStatus.Active = !MainStatus.Active;
+                        if (MainStatus.Active) {
                             // nothing needed
                         }
                     }
@@ -178,16 +191,16 @@ namespace KeyCorrect {
                     // cancel real keypress
                     return false;
                 } else {
-                    if (keyCodeInAlphabet(keyStroke)) {
+                    if (KeyCodeInAlphabet(keyStroke)) {
                         // if the pressed key is in standard alphabet
 
-                        if (MainStatus.active && keyStroke.State == KeyState.Down && MainStatus.textToWrite.Length > 0) {
+                        if (MainStatus.Active && keyStroke.State == KeyState.Down && MainStatus.TextToWrite.Length > 0) {
                             // type the next correct character
-                            typeNextChar();
+                            TypeNextChar();
                             // cancel real keypress
                             return false;
                         }
-                    } else if (MainStatus.active) {
+                    } else if (MainStatus.Active) {
                         // interception is active but the key pressed was not in standard english alphabet
                         switch (keyStroke.Code) {
                             case KeyCode.LeftWindowsKey or KeyCode.RightWindowsKey or KeyCode.Alt or KeyCode.Tab or
@@ -198,7 +211,7 @@ namespace KeyCorrect {
                         }
                     }
                 }
-                if (MainStatus.textToWrite.Length <= 0 && MainStatus.active) {
+                if (MainStatus.TextToWrite.Length <= 0 && MainStatus.Active) {
                     // cancel the keypress if done writing
                     return false;
                 }

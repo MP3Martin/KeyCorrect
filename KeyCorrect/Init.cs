@@ -1,41 +1,54 @@
-﻿using InputInterceptorNS;
+﻿using System.Diagnostics;
+using InputInterceptorNS;
 using static KeyCorrect.Program;
 
 namespace KeyCorrect {
     internal static class Init {
         internal static void Run() {
-            // start of init
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            // start of window on top
+            string GuidConsoleTitle = Guid.NewGuid().ToString();
+            Console.Title = GuidConsoleTitle;
+            Thread.Sleep(50);
+            IntPtr hWnd = Process.GetCurrentProcess().MainWindowHandle;
+            hWnd = FindWindow(null, Console.Title);
+            Thread.Sleep(50);
 
-            List<int>? alphabetNums = new List<int> { 28, 57 };
+            if (hWnd != IntPtr.Zero) {
+                // Set the console window to be always on top
+                SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+            }
+            // end of window on top
+
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.Title = $"KeyCorrect @ v{MainStatus.VERSION}";
+
+            List<int>? AlphabetNums = new List<int> { 28, 57 };
             for (int i = 16; i <= 25; i++) {
-                alphabetNums.Add(i);
+                AlphabetNums.Add(i);
             }
             for (int i = 30; i <= 38; i++) {
-                alphabetNums.Add(i);
+                AlphabetNums.Add(i);
             }
             for (int i = 44; i <= 50; i++) {
-                alphabetNums.Add(i);
+                AlphabetNums.Add(i);
             }
 
             // create a list of keycodes that represent the simple alphabet
-            foreach (int num in alphabetNums) {
-                alphabetKeyCodes.Add((KeyCode)num);
+            foreach (int num in AlphabetNums) {
+                AlphabetKeyCodes.Add((KeyCode)num);
             }
 
-            alphabetNums = null;
+            AlphabetNums = null;
 
             foreach (int index in Enumerable.Range(97, 122 - 97 + 1)) {
-                alphabetCharactersAndMoreAsString.Add(((char)index).ToString());
+                AlphabetCharactersAndMoreAsString.Add(((char)index).ToString());
             }
             foreach (int index in Enumerable.Range(65, 90 - 65 + 1)) {
-                alphabetCharactersAndMoreAsString.Add(((char)index).ToString());
+                AlphabetCharactersAndMoreAsString.Add(((char)index).ToString());
             }
             foreach (string symbol in new List<string> { ".", ",", " " }) {
-                alphabetCharactersAndMoreAsString.Add(symbol);
+                AlphabetCharactersAndMoreAsString.Add(symbol);
             }
-
-            // end of init
         }
     }
 }
