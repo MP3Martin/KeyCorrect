@@ -7,6 +7,7 @@ Intercept keyboard with correct characters<br><br>
 - My first .NET project
 - Made for personal usage (because handling different keyboard layouts / special characters would be too complex for this "simple project")
 - **Only supports the most simple characters** (maybe try switching to english keyboard layout if it is typing weird characters)
+- Only for Windows x64
 - Build on top of [this example](https://github.com/0x2E757/InputInterceptor#example-application) thanks to [@oblitum](https://github.com/oblitum) and [@0x2E757](https://github.com/0x2E757)
 - **⚠️ Use at own risk ⚠️**, you chose to use this software
 
