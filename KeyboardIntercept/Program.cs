@@ -33,6 +33,8 @@ namespace KeyboardIntercept {
 
             internal static bool stopUpdatingText = false;
 
+            internal static bool shouldClearConsole = false;
+
         }
         [STAThread]
         public static void Main(string[] args) {
@@ -132,6 +134,7 @@ namespace KeyboardIntercept {
                     Key = Console.ReadKey(true).KeyChar;
                 }
                 MainStatus.keyboardHook.Dispose();
+                MainStatus.shouldClearConsole = true;
                 Console.Clear();
             } else {
                 InstallDriver();
@@ -139,7 +142,9 @@ namespace KeyboardIntercept {
 
             MainStatus.stopUpdatingText = true;
             Thread.Sleep(100);
-            Console.Clear();
+            if (MainStatus.shouldClearConsole) {
+                Console.Clear();
+            }
             Console.WriteLine("\nProgram ended. Press any key to close this window.");
             Console.ReadKey(true);
 
