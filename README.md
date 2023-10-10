@@ -7,7 +7,8 @@ Intercept keyboard with correct characters<br><br>
 - My first .NET project
 - Made for personal usage (because handling different keyboard layouts / special characters would be too complex for this "simple project")
 - **Only supports the most simple characters** (maybe try switching to english keyboard layout if it is typing weird characters)
-- ⚠️ Use at own risk ⚠️, you chose to use this software
+- Build on top of [this example](https://github.com/0x2E757/InputInterceptor#example-application)
+- **⚠️ Use at own risk ⚠️**, you chose to use this software
 
 ## First use
 1. Download the latest EXE from [releases](https://github.com/MP3Martin/KeyCorrect/releases/latest) or build it from source using .NET 6
