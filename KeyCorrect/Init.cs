@@ -1,7 +1,7 @@
 ﻿using InputInterceptorNS;
-using static KeyboardIntercept.Program;
+using static KeyCorrect.Program;
 
-namespace KeyboardIntercept {
+namespace KeyCorrect {
     internal static class Init {
         internal static void Run() {
             // start of init

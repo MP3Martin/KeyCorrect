@@ -1,8 +1,8 @@
 ﻿using InputInterceptorNS;
 using Spectre.Console;
-using static KeyboardIntercept.Program;
+using static KeyCorrect.Program;
 
-namespace KeyboardIntercept {
+namespace KeyCorrect {
     internal static class Util {
         internal static string escapeString(string str) {
             return str.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵").Replace("	", "⭾");
@@ -59,35 +59,10 @@ namespace KeyboardIntercept {
                 if (InputInterceptor.InstallDriver()) {
                     Console.WriteLine("Done! Restart your computer.");
                 } else {
-                    Console.WriteLine("Something... gone... wrong... :(");
+                    Console.WriteLine("Something has gone wrong :(");
                 }
             } else {
                 Console.WriteLine("Restart program with administrator rights so it will be installed.");
-            }
-        }
-
-        internal static string GetClipboardData() {
-            try {
-                string clipboardData = null;
-                Exception threadEx = null;
-                Thread staThread = new Thread(
-                    delegate () {
-                        try {
-                            if (Clipboard.ContainsText(TextDataFormat.Text)) {
-                                clipboardData = Clipboard.GetText(TextDataFormat.Text);
-                            } else {
-                                clipboardData = "";
-                            }
-                        } catch (Exception ex) {
-                            threadEx = ex;
-                        }
-                    });
-                staThread.SetApartmentState(ApartmentState.STA);
-                staThread.Start();
-                staThread.Join();
-                return clipboardData;
-            } catch (Exception exception) {
-                return string.Empty;
             }
         }
     }

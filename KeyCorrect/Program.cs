@@ -1,9 +1,8 @@
 ﻿using InputInterceptorNS;
 using Spectre.Console;
+using static KeyCorrect.Util;
 
-using static KeyboardIntercept.Util;
-
-namespace KeyboardIntercept {
+namespace KeyCorrect {
     internal static class Program {
         internal static List<string> alphabetCharactersAndMoreAsString = new();
         internal static List<KeyCode> alphabetKeyCodes = new();
@@ -116,12 +115,18 @@ namespace KeyboardIntercept {
 
                 // Create a timer to get clipboard
                 System.Timers.Timer getClipboardTimer = new System.Timers.Timer();
-                getClipboardTimer.Elapsed += new System.Timers.ElapsedEventHandler((object source, System.Timers.ElapsedEventArgs e) => {
+                getClipboardTimer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
                     if (MainStatus.active) {
                         return;
                     }
-
-                    string clipboardText = GetClipboardData();
+                    string clipboardText = TextCopy.ClipboardService.GetText();
+                    try {
+                        if (clipboardText == null) {
+                            clipboardText = string.Empty;
+                        }
+                    } catch (Exception ex) {
+                        clipboardText = string.Empty;
+                    }
                     MainStatus.textToWrite = clipboardText;
                 });
                 getClipboardTimer.Interval = 200;
