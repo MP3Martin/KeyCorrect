@@ -1,13 +1,17 @@
-﻿using System.Text;
-using System.Timers;
+﻿using System.Timers;
 using InputInterceptorNS;
 using Spectre.Console;
 
+using static KeyboardIntercept.Util;
+
 namespace KeyboardIntercept {
-    internal class Program {
-        static class MainStatus {
-            public static bool active = false;
-            public static string textToWrite {
+    internal static class Program {
+        internal static List<string> alphabetCharactersAndMoreAsString = new();
+        internal static List<KeyCode> alphabetKeyCodes = new();
+
+        internal static class MainStatus {
+            internal static bool active = false;
+            internal static string textToWrite {
                 set {
                     _textToWrite = value;
                     if (!active) {
@@ -20,91 +24,21 @@ namespace KeyboardIntercept {
             /// <summary>
             /// Like textToWrite but ony updates when active is False
             /// </summary>
-            public static string textToWriteStable = "";
+            internal static string textToWriteStable = "";
 
 
-            public static KeyboardHook keyboardHook;
+            internal static KeyboardHook keyboardHook;
 
-            public static bool ignoreAllKeyPressesButStillSendThem = false;
+            internal static bool ignoreAllKeyPressesButStillSendThem = false;
 
-            public static bool stopUpdatingText = false;
+            internal static bool stopUpdatingText = false;
 
         }
         [STAThread]
         public static void Main(string[] args) {
-            // start of init
-            Console.OutputEncoding = Encoding.UTF8;
-            List<KeyCode> alphabetKeyCodes = new();
 
-            string fixCzechKeyboardKeys(string input) {
-                if (Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToLower() == "cs") {
-                    input = input.Replace("z", "ㅁ").Replace("y", "z").Replace("ㅁ", "y");
-                    input = input.Replace("Z", "ㅁ").Replace("Y", "Z").Replace("ㅁ", "Y");
-                }
-                return input;
-            }
+            Init.Run();
 
-            bool keyCodeInAlphabet(KeyStroke keyStroke) {
-                foreach (KeyCode keyCode in alphabetKeyCodes) {
-                    if (keyCode == keyStroke.Code) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            List<int>? alphabetNums = new List<int> { 28, 57 };
-            for (int i = 16; i <= 25; i++) {
-                alphabetNums.Add(i);
-            }
-            for (int i = 30; i <= 38; i++) {
-                alphabetNums.Add(i);
-            }
-            for (int i = 44; i <= 50; i++) {
-                alphabetNums.Add(i);
-            }
-
-            // create a list of keycodes that represent the simple alphabet
-            foreach (int num in alphabetNums) {
-                alphabetKeyCodes.Add((KeyCode)num);
-            }
-
-            alphabetNums = null;
-
-            List<string> alphabetCharactersAndMoreAsString = new();
-            foreach (int index in Enumerable.Range(97, 122 - 97 + 1)) {
-                alphabetCharactersAndMoreAsString.Add(((char)index).ToString());
-            }
-            foreach (int index in Enumerable.Range(65, 90 - 65 + 1)) {
-                alphabetCharactersAndMoreAsString.Add(((char)index).ToString());
-            }
-            foreach (string symbol in new List<string> { ".", ",", " " }) {
-                alphabetCharactersAndMoreAsString.Add(symbol);
-            }
-
-            // end of init
-
-            // start of methods
-            string escapeString(string str) {
-                return str.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵").Replace("	", "⭾");
-            }
-
-            bool doesStringOnlyContainStandardLowercaseLetters(string input) {
-                foreach (string character in alphabetCharactersAndMoreAsString) {
-                    input = input.Replace(character, "");
-                }
-                return (input == "");
-            }
-
-            async void typeNextChar() {
-                string codeToPress = MainStatus.textToWrite.Substring(0, 1);
-                MainStatus.ignoreAllKeyPressesButStillSendThem = true;
-                MainStatus.keyboardHook.SimulateInput(fixCzechKeyboardKeys(codeToPress));
-                MainStatus.ignoreAllKeyPressesButStillSendThem = false;
-                MainStatus.textToWrite = MainStatus.textToWrite[1..];
-            }
-
-            // end of methods
 
             if (InitializeDriver()) {
                 // create hooks
@@ -263,56 +197,7 @@ namespace KeyboardIntercept {
                 return true;
             }
 
-            Boolean InitializeDriver() {
-                if (InputInterceptor.CheckDriverInstalled()) {
-                    //Console.WriteLine("Input interceptor seems to be installed.");
-                    if (InputInterceptor.Initialize()) {
-                        //Console.WriteLine("Input interceptor successfully initialized.");
-                        return true;
-                    }
-                }
-                Console.WriteLine("Input interceptor initialization failed.");
-                return false;
-            }
 
-            void InstallDriver() {
-                Console.WriteLine("Input interceptor not installed.");
-                if (InputInterceptor.CheckAdministratorRights()) {
-                    Console.WriteLine("Installing...");
-                    if (InputInterceptor.InstallDriver()) {
-                        Console.WriteLine("Done! Restart your computer.");
-                    } else {
-                        Console.WriteLine("Something... gone... wrong... :(");
-                    }
-                } else {
-                    Console.WriteLine("Restart program with administrator rights so it will be installed.");
-                }
-            }
-
-            string GetClipboardData() {
-                try {
-                    string clipboardData = null;
-                    Exception threadEx = null;
-                    Thread staThread = new Thread(
-                        delegate () {
-                            try {
-                                if (Clipboard.ContainsText(TextDataFormat.Text)) {
-                                    clipboardData = Clipboard.GetText(TextDataFormat.Text);
-                                } else {
-                                    clipboardData = "";
-                                }
-                            } catch (Exception ex) {
-                                threadEx = ex;
-                            }
-                        });
-                    staThread.SetApartmentState(ApartmentState.STA);
-                    staThread.Start();
-                    staThread.Join();
-                    return clipboardData;
-                } catch (Exception exception) {
-                    return string.Empty;
-                }
-            }
         }
     }
 }
