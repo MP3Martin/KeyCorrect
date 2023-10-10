@@ -1,7 +1,6 @@
 ﻿using InputInterceptorNS;
 using Spectre.Console;
 using static KeyboardIntercept.Program;
-//using static KeyboardIntercept.Program.Main;
 
 namespace KeyboardIntercept {
     internal static class Util {
