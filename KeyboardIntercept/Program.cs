@@ -1,5 +1,4 @@
-﻿using System.Timers;
-using InputInterceptorNS;
+﻿using InputInterceptorNS;
 using Spectre.Console;
 
 using static KeyboardIntercept.Util;
@@ -117,7 +116,7 @@ namespace KeyboardIntercept {
 
                 // Create a timer to get clipboard
                 System.Timers.Timer getClipboardTimer = new System.Timers.Timer();
-                getClipboardTimer.Elapsed += new ElapsedEventHandler((object source, ElapsedEventArgs e) => {
+                getClipboardTimer.Elapsed += new System.Timers.ElapsedEventHandler((object source, System.Timers.ElapsedEventArgs e) => {
                     if (MainStatus.active) {
                         return;
                     }

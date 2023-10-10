@@ -1,12 +1,11 @@
-﻿using System.Text;
-using InputInterceptorNS;
+﻿using InputInterceptorNS;
 using static KeyboardIntercept.Program;
 
 namespace KeyboardIntercept {
     internal static class Init {
         internal static void Run() {
             // start of init
-            Console.OutputEncoding = Encoding.UTF8;
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             List<int>? alphabetNums = new List<int> { 28, 57 };
             for (int i = 16; i <= 25; i++) {
