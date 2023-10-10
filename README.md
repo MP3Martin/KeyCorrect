@@ -23,7 +23,7 @@ Intercept keyboard with correct characters<br><br>
 - You type *"abcd"* on your keyboard, but the actual text that appeared in notepad was *"text"*
 
 ## Uninstall
-- Remove the exe you downloaded (KeyCorrect-v\*.\*.\*.exe)
+- Remove the EXE you downloaded (KeyCorrect-v\*.\*.\*.exe)
 - Download and run this script: **[here](https://github.com/MP3Martin/KeyCorrect/blob/main/scripts/uninstall-interception-driver-run-as-admin.exe)**
 - Restart your computer
 
