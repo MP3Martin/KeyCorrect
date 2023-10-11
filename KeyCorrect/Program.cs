@@ -48,6 +48,8 @@ namespace KeyCorrect {
 
             internal static bool ShouldClearConsole = false;
 
+            internal static string KeyboardLayout = "";
+
         }
         public static void Main(string[] args) {
             Initialize.Run();
@@ -60,7 +62,10 @@ namespace KeyCorrect {
                 LiveConsole.Run();
 
                 // Create a timer to get clipboard
-                Timers.ClipboardTimer.Run();
+                Timers.ClipboardTimer.Start();
+
+                // Create a timer to get keyboard layout
+                Timers.KeyboardLayoutTimer.Start();
 
                 // loop until key to exit is pressed
                 char Key = '-';
