@@ -16,7 +16,7 @@ namespace KeyCorrect {
         internal static async void TypeNextChar() {
             string codeToPress = MainStatus.TextToWrite.Substring(0, 1);
             MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
-            MainStatus.KeyboardHook.SimulateInput(FixCzechKeyboardKeys(codeToPress));
+            MainStatus.KeyboardHook.SimulateInput(FixCzechKeyboardKeys(codeToPress), 0, 1);
             MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
             MainStatus.TextToWrite = MainStatus.TextToWrite[1..];
         }
