@@ -1,9 +1,8 @@
 ﻿namespace KeyCorrect {
     internal static class Timers {
         internal class ClipboardTimer {
-            internal static void Run() {
-                System.Timers.Timer GetClipboardTimer = new System.Timers.Timer();
-                GetClipboardTimer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
+            internal static void Start() {
+                CreateTimer(() => {
                     if (MainStatus.Active) {
                         return;
                     }
@@ -16,11 +15,17 @@
                         ClipboardText = string.Empty;
                     }
                     MainStatus.TextToWrite = ClipboardText;
-                });
-                GetClipboardTimer.Interval = 200;
-                GetClipboardTimer.Enabled = true;
+                }, 200);
             }
 
+        }
+
+        internal class KeyboardLayoutTimer {
+            internal static void Start() {
+                CreateTimer(() => {
+                    MainStatus.KeyboardLayout = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+                }, 1 * 1000);
+            }
         }
     }
 }

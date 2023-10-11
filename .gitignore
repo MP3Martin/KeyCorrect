@@ -134,3 +134,6 @@ _NCrunch*
 
 # Custom
 .vs/
+!/ClickOnce/
+!/ClickOnce/**/*
+!/KeyCorrect/Properties/PublishProfiles/**/*.pubxml

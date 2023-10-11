@@ -13,20 +13,77 @@ namespace KeyCorrect {
             return (input == "");
         }
 
-        internal static async void TypeNextChar() {
-            string codeToPress = MainStatus.TextToWrite.Substring(0, 1);
+        internal static void TypeNextChar() {
+            void PressKey(object key) {
+                key = key.ToString();
+                MainStatus.KeyboardHook.SimulateInput(key.ToString(), 0, 1);
+            }
+            string CodeToPress = MainStatus.TextToWrite[..1];
+            CodeToPress = FixCzechKeyboardKeys(CodeToPress);
+            bool PressSimpleLetter = false;
             MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
-            MainStatus.KeyboardHook.SimulateInput(FixCzechKeyboardKeys(codeToPress), 0, 1);
+            if (IsCzechKeyboardLayout()) {
+                object? SpecialKeyToPress = null;
+                switch (CodeToPress.ToLower()) {
+                    case "+":
+                        SpecialKeyToPress = 1;
+                        break;
+                    case "ě":
+                        SpecialKeyToPress = 2;
+                        break;
+                    case "š":
+                        SpecialKeyToPress = 3;
+                        break;
+                    case "č":
+                        SpecialKeyToPress = 4;
+                        break;
+                    case "ř":
+                        SpecialKeyToPress = 5;
+                        break;
+                    case "ž":
+                        SpecialKeyToPress = 6;
+                        break;
+                    case "ý":
+                        SpecialKeyToPress = 7;
+                        break;
+                    case "á":
+                        SpecialKeyToPress = 8;
+                        break;
+                    case "í":
+                        SpecialKeyToPress = 9;
+                        break;
+                    case "é":
+                        SpecialKeyToPress = 0;
+                        break;
+                    default:
+                        PressSimpleLetter = true;
+                        break;
+                }
+                if (SpecialKeyToPress != null) {
+                    if (CodeToPress.ToUpper() == CodeToPress) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
+                    PressKey(SpecialKeyToPress);
+                    if (CodeToPress.ToUpper() == CodeToPress) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
+                }
+            } else {
+                PressSimpleLetter = true;
+            }
+            if (PressSimpleLetter) {
+                MainStatus.KeyboardHook.SimulateInput(CodeToPress, 0, 1);
+            }
             MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
             MainStatus.TextToWrite = MainStatus.TextToWrite[1..];
         }
 
         internal static string FixCzechKeyboardKeys(string input) {
-            if (Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToLower() == "cs") {
+            if (IsCzechKeyboardLayout()) {
                 input = input.Replace("z", "ㅁ").Replace("y", "z").Replace("ㅁ", "y");
                 input = input.Replace("Z", "ㅁ").Replace("Y", "Z").Replace("ㅁ", "Y");
             }
             return input;
+        }
+
+        internal static bool IsCzechKeyboardLayout() {
+            return MainStatus.KeyboardLayout == "cs";
         }
 
         internal static bool KeyCodeInAlphabet(KeyStroke keyStroke) {
@@ -62,6 +119,16 @@ namespace KeyCorrect {
             } else {
                 Console.WriteLine("Restart program with administrator rights so it will be installed.");
             }
+        }
+
+        internal static void CreateTimer(Action function, int interval) {
+            System.Timers.Timer Timer = new System.Timers.Timer();
+            Timer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
+                function();
+            });
+            Timer.Interval = interval;
+            Timer.Enabled = true;
+
         }
     }
 }
