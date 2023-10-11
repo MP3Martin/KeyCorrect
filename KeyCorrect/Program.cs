@@ -22,7 +22,7 @@ namespace KeyCorrect {
         // end of api import
 
         internal static class MainStatus {
-            internal const string VERSION = "1.0.2";
+            internal const string VERSION = "1.1.0";
             internal static bool Active = false;
             internal static string TextToWrite {
                 set {
@@ -51,7 +51,7 @@ namespace KeyCorrect {
             internal static string KeyboardLayout = "";
 
         }
-        public static void Main(string[] args) {
+        public static void RunMainProgram() {
             Initialize.Run();
 
             if (InitializeDriver()) {
