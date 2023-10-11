@@ -1,18 +1,19 @@
 ﻿namespace KeyCorrect {
     internal static class KeyboardCallbackClass {
         internal static bool KeyboardCallback(ref KeyStroke KeyStroke) {
-            //Console.WriteLine($"{keyStroke.Code} {keyStroke.State} {keyStroke.Information}");
+            //Console.WriteLine($"{KeyStroke.Code} {KeyStroke.State} {KeyStroke.Information}");
             if (MainStatus.IgnoreAllKeyPressesButStillSendThem) {
                 return true;
             }
             // Check if pageUp is pressed
-            if (KeyStroke.Code == KeyCode.Numpad9 && (KeyStroke.State == KeyState.E0 || KeyStroke.State == (KeyState.E0 | KeyState.Up))) {
+            if ((!Console.NumberLock && KeyStroke.Code == KeyCode.Numpad9) || (KeyStroke.Code == KeyCode.Numpad9 && (KeyStroke.State == KeyState.E0 || KeyStroke.State == (KeyState.E0 | KeyState.Up)))) {
                 // Fix issues with pageUp being special key
                 if (KeyStroke.State == (KeyState.E0 | KeyState.Up)) {
                     KeyStroke.State = KeyState.Up;
-                } else {
+                } else if (KeyStroke.State == KeyState.E0) {
                     KeyStroke.State = KeyState.Down;
                 }
+                //Console.WriteLine($"{KeyStroke.Code} {KeyStroke.State} {KeyStroke.Information}");
 
                 // Check if the key is released
                 if (KeyStroke.State == KeyState.Up) {

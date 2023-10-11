@@ -24,6 +24,9 @@ Intercept keyboard with correct characters<br><br>
 - You press the PageUp key
 - You type *"abcd"* on your keyboard, but the actual text that appeared in notepad was *"text"*
 
+## No pageup key?
+- How to press PageUp on a laptop (if you don't have a standalone PageUp key): Turn off NumLock and press Numpad9
+
 ## Uninstall
 - Remove the EXE you downloaded (KeyCorrect-v\*.\*.\*.exe)
 - Download and run this script: **[here](https://github.com/MP3Martin/KeyCorrect/blob/main/scripts/uninstall-interception-driver-run-as-admin.exe)**
