@@ -1,6 +1,4 @@
-﻿using InputInterceptorNS;
-using Spectre.Console;
-using static KeyCorrect.Program;
+﻿using Spectre.Console;
 
 namespace KeyCorrect {
     internal static class Util {

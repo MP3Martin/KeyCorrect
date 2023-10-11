@@ -1,15 +1,11 @@
-﻿using System.Diagnostics;
-using InputInterceptorNS;
-using static KeyCorrect.Program;
-
-namespace KeyCorrect {
-    internal static class Init {
+﻿namespace KeyCorrect {
+    internal static class Initialize {
         internal static void Run() {
             // start of window on top
             string GuidConsoleTitle = Guid.NewGuid().ToString();
             Console.Title = GuidConsoleTitle;
             Thread.Sleep(50);
-            IntPtr hWnd = Process.GetCurrentProcess().MainWindowHandle;
+            IntPtr hWnd = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
             hWnd = FindWindow(null, Console.Title);
             Thread.Sleep(50);
 
