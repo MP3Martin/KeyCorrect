@@ -12,24 +12,31 @@ Intercept keyboard with correct characters<br><br>
 - **⚠️ Use at own risk ⚠️**, you chose to use this software
 
 ## First use
-1. Download the latest EXE from [releases](https://github.com/MP3Martin/KeyCorrect/releases/latest) or build it from source using .NET 6
-2. Right click on the EXE and choose **"Run as administrator"** (Only required for the first time to install the keyboard driver)
-3. Read the program output. If it says *"Done! Restart your computer."*, then do just that **(important)**
-4. After restarting, you can just run the downloaded EXE (simple double click, no admin permission required) and use it
+1. Download the latest installer from [releases](https://github.com/MP3Martin/KeyCorrect/releases/latest) or build it from source using .NET 6
+2. Double click the installer EXE
+3. Select "Install"
+4. Press "Yes" when it asks for admin permission
+5. Read the program output. If it says *"Done! Restart your computer."*, then do just that **(important)**
+6. After restarting, you can just run the program (from desktop or start menu) and use it (program name is "KeyCorrect")
 
 ## Example usage
 - You copy *"text"* to your clipboard
 - You launch this program
+- You press "Yes" when it asks for admin permission
 - You open notepad
 - You press the PageUp key
 - You type *"abcd"* on your keyboard, but the actual text that appeared in notepad was *"text"*
+- You press the PageUp key again to toggle the interception back to off
 
 ## No pageup key?
 - How to press PageUp on a laptop (if you don't have a standalone PageUp key): Turn off NumLock and press Numpad9
 
 ## Uninstall
-- Remove the EXE you downloaded (KeyCorrect-v\*.\*.\*.exe)
-- Download and run this script: **[here](https://github.com/MP3Martin/KeyCorrect/blob/main/scripts/uninstall-interception-driver-run-as-admin.exe)**
+- Press `WIN` + `R`
+- Type `appwiz.cpl`
+- Find "KeyCorrect" and double click it
+- When a window opens, select "Remove" and then "OK"
+- Download and run this script to remove the keyboard driver: **[here](https://github.com/MP3Martin/KeyCorrect/blob/main/scripts/uninstall-interception-driver-run-as-admin.exe)**
 - Restart your computer
 
 ## Issues
