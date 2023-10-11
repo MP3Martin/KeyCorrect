@@ -16,7 +16,7 @@
             // end of window on top
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.Title = $"KeyCorrect @ v{MainStatus.VERSION}";
+            Console.Title = $"KeyCorrect @ v{MainStatus.VERSION} - By MP3Martin";
 
             List<int>? AlphabetNums = new List<int> { 28, 57 };
             for (int i = 16; i <= 25; i++) {
