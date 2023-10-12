@@ -41,7 +41,7 @@ Intercept keyboard with correct characters<br><br>
 
 ## Issues
 - Please report any issue in [issues](https://github.com/MP3Martin/KeyCorrect/issues) or at https://discord.mp3martin.xyz/
-- But remember that stuff like different keyboard layouts are not supported. You can still create a pull request, but don't create an issue because *enter* shows up like and *underscore*
+- But remember that stuff like different keyboard layouts are not supported. You can still create a pull request, but don't create an issue because *enter* shows up like an *underscore*
 
 ## Pull requests
 - Anything is welcome (feature, code cleanup, speed optimisation, fixing a little misspell)
