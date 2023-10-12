@@ -56,6 +56,36 @@ namespace KeyCorrect {
                     case "é":
                         SpecialKeyToPress = 0;
                         break;
+                    case "ď":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.D); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.D);
+                        };
+                        break;
+                    case "ň":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.N); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.N);
+                        };
+                        break;
+                    case "ó":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.O); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.O);
+                        };
+                        break;
+                    case "ť":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.T); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.T);
+                        };
+                        break;
+                    case "ú":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.OpenBracketBrace);
+                        };
+                        break;
+                    case "ů":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Semicolon);
+                        };
+                        break;
                     default:
                         PressSimpleLetter = true;
                         break;
@@ -65,7 +95,11 @@ namespace KeyCorrect {
                     if (CodeToPress.ToUpper() == CodeToPress) ShouldInvertCapsLock = !ShouldInvertCapsLock;
 
                     if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
-                    PressKey(SpecialKeyToPress);
+                    if (SpecialKeyToPress is Action) {
+                        ((Action)SpecialKeyToPress)();
+                    } else {
+                        PressKey(SpecialKeyToPress);
+                    }
                     if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
                 }
             } else {
