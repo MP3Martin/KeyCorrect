@@ -22,6 +22,7 @@ namespace KeyCorrect {
             CodeToPress = FixCzechKeyboardKeys(CodeToPress);
             bool PressSimpleLetter = false;
             MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
+            bool CapsLockEnabled = Console.CapsLock;
             if (IsCzechKeyboardLayout()) {
                 object? SpecialKeyToPress = null;
                 switch (CodeToPress.ToLower()) {
@@ -60,15 +61,20 @@ namespace KeyCorrect {
                         break;
                 }
                 if (SpecialKeyToPress != null) {
-                    if (CodeToPress.ToUpper() == CodeToPress) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
+                    bool ShouldInvertCapsLock = CapsLockEnabled;
+                    if (CodeToPress.ToUpper() == CodeToPress) ShouldInvertCapsLock = !ShouldInvertCapsLock;
+
+                    if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
                     PressKey(SpecialKeyToPress);
-                    if (CodeToPress.ToUpper() == CodeToPress) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
+                    if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
                 }
             } else {
                 PressSimpleLetter = true;
             }
             if (PressSimpleLetter) {
+                if (CapsLockEnabled) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
                 MainStatus.KeyboardHook.SimulateInput(CodeToPress, 0, 1);
+                if (CapsLockEnabled) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
             }
             MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
             MainStatus.TextToWrite = MainStatus.TextToWrite[1..];
