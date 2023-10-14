@@ -1,12 +1,12 @@
 ﻿global using InputInterceptorNS;
 global using static KeyCorrect.Program;
 global using static KeyCorrect.Util;
-using static KeyCorrect.KeyboardCallbackClass;
 using System.Runtime.InteropServices;
+using static KeyCorrect.KeyboardCallbackClass;
 
 namespace KeyCorrect {
     internal static class Program {
-        internal static List<string> AlphabetCharactersAndMoreAsString = new();
+        internal static List<string> SupportedCharacters = new();
         internal static List<KeyCode> AlphabetKeyCodes = new();
 
         // start of api import
@@ -49,6 +49,8 @@ namespace KeyCorrect {
             internal static bool ShouldClearConsole = false;
 
             internal static string KeyboardLayout = "";
+
+            internal static IntPtr hWnd;
 
         }
         public static void RunMainProgram() {

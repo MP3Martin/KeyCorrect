@@ -18,25 +18,25 @@ namespace KeyCorrect {
                     }
 
                     Markup UnsupportedCharWarning() {
-                        if (!DoesStringOnlyContainStandardLowercaseLetters(MainStatus.TextToWriteStable)) {
+                        if (!DoesStringOnlyContainSupportedCharacters(MainStatus.TextToWriteStable)) {
                             return new Markup("[gold3]Warning:[/] [indianred1]This program only supports typing english " +
-                            "letters\nand most basic punctuation marks![/]");
+                            "letters!\nBut there is a special support for Czech QWERTZ layout.[/]");
                         }
                         return new Markup("");
                     }
 
                     string textToWriteStableEscaped = EscapeString(TextToWrite);
                     // calculate how much of the text was already written
-                    int textWrittenLen = MainStatus.TextToWriteStable.Length - MainStatus.TextToWrite.Length;
+                    int textWrittenLen = EscapeString(MainStatus.TextToWriteStable).Length - EscapeString(MainStatus.TextToWrite).Length;
                     string TextToWriteLeftPart;
                     string TextToWriteRightPart;
                     try {
-                        TextToWriteLeftPart = $"{textToWriteStableEscaped[..textWrittenLen]}";
+                        TextToWriteLeftPart = $"{textToWriteStableEscaped[..(Math.Max(0, textWrittenLen))]}";
                     } catch (Exception) {
                         TextToWriteLeftPart = textToWriteStableEscaped;
                     }
                     try {
-                        TextToWriteRightPart = $"{textToWriteStableEscaped[textWrittenLen..]}";
+                        TextToWriteRightPart = $"{textToWriteStableEscaped[(Math.Max(0, textWrittenLen))..]}";
                     } catch (Exception) {
                         TextToWriteRightPart = "";
                     }

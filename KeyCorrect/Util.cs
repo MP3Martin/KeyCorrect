@@ -3,14 +3,15 @@
 namespace KeyCorrect {
     internal static class Util {
         internal static string EscapeString(string str) {
-            return str.EscapeMarkup().Replace("\r\n", "↵").Replace("\n", "↵").Replace("	", "⭾");
+            return FixInvisibleChars(str.EscapeMarkup()).Replace("\n", "╝").Replace("\t", "»").Replace("	", "»");
         }
 
-        internal static bool DoesStringOnlyContainStandardLowercaseLetters(string input) {
-            foreach (string character in AlphabetCharactersAndMoreAsString) {
+        internal static bool DoesStringOnlyContainSupportedCharacters(string input) {
+            input = input.ToLower();
+            foreach (string character in SupportedCharacters) {
                 input = input.Replace(character, "");
             }
-            return (input == "");
+            return (input.Replace("\n", "").Replace("\r", "").Replace(Environment.NewLine, "") == "");
         }
 
         internal static void TypeNextChar() {
@@ -18,8 +19,15 @@ namespace KeyCorrect {
                 key = key.ToString();
                 MainStatus.KeyboardHook.SimulateInput(key.ToString(), 0, 1);
             }
+            int RemoveFromTextToWrite = 1;
             string CodeToPress = MainStatus.TextToWrite[..1];
-            CodeToPress = FixCzechKeyboardKeys(CodeToPress);
+            try {
+                if (FixInvisibleChars(MainStatus.TextToWrite[..2]) == "\n" || FixInvisibleChars(MainStatus.TextToWrite[..2]) == "\t") {
+                    CodeToPress = MainStatus.TextToWrite[..2];
+                    RemoveFromTextToWrite = 2;
+                }
+            } catch (Exception) { }
+            CodeToPress = FixCzechKeyboardKeys(FixInvisibleChars(CodeToPress));
             bool PressSimpleLetter = false;
             MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
             bool CapsLockEnabled = Console.CapsLock;
@@ -78,12 +86,97 @@ namespace KeyCorrect {
                         break;
                     case "ú":
                         SpecialKeyToPress = () => {
-                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.OpenBracketBrace);
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.OpenBracketBrace, 1);
                         };
                         break;
                     case "ů":
                         SpecialKeyToPress = () => {
-                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Semicolon);
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Semicolon, 1);
+                        };
+                        break;
+                    case "\n":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Enter, 1);
+                        };
+                        break;
+                    case "\t":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Tab, 1);
+                        };
+                        break;
+                    case "=":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Dash, 1);
+                        };
+                        break;
+                    case "?":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Comma, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case ":":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Dot, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case "_":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Slash, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case "!":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Apostrophe, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case "\"":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Semicolon, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case "(":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CloseBracketBrace, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case ")":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CloseBracketBrace, 1);
+                        };
+                        break;
+                    case "/":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.OpenBracketBrace, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case "-":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Slash, 1);
+                        };
+                        break;
+                    case "'":
+                        SpecialKeyToPress = () => {
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift); MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Backslash, 1); MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        };
+                        break;
+                    case "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "0":
+                        SpecialKeyToPress = () => {
+                            var NumberKeyCodePairs = new List<(String, KeyCode)> {
+                                ("1", KeyCode.One),
+                                ("2", KeyCode.Two),
+                                ("3", KeyCode.Three),
+                                ("4", KeyCode.Four),
+                                ("5", KeyCode.Five),
+                                ("6", KeyCode.Six),
+                                ("7", KeyCode.Seven),
+                                ("8", KeyCode.Eight),
+                                ("9", KeyCode.Nine),
+                                ("0", KeyCode.Zero),
+                            };
+                            KeyCode KeyCodeNumberToPress = NumberKeyCodePairs.First(i => i.Item1 == CodeToPress).Item2;
+                            MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                            MainStatus.KeyboardHook.SimulateKeyPress(KeyCodeNumberToPress, 1);
+                            MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
                         };
                         break;
                     default:
@@ -111,7 +204,7 @@ namespace KeyCorrect {
                 if (CapsLockEnabled) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
             }
             MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
-            MainStatus.TextToWrite = MainStatus.TextToWrite[1..];
+            MainStatus.TextToWrite = MainStatus.TextToWrite[RemoveFromTextToWrite..];
         }
 
         internal static string FixCzechKeyboardKeys(string input) {
@@ -169,6 +262,10 @@ namespace KeyCorrect {
             Timer.Interval = interval;
             Timer.Enabled = true;
 
+        }
+
+        internal static string FixInvisibleChars(string input) {
+            return input.Replace("\r\n", "\n").Replace("	", "\t");
         }
     }
 }

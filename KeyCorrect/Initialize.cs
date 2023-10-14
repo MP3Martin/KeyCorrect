@@ -5,15 +5,17 @@
             string GuidConsoleTitle = Guid.NewGuid().ToString();
             Console.Title = GuidConsoleTitle;
             Thread.Sleep(50);
-            IntPtr hWnd = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
-            hWnd = FindWindow(null, Console.Title);
+            MainStatus.hWnd = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+            MainStatus.hWnd = FindWindow(null, Console.Title);
             Thread.Sleep(50);
 
-            if (hWnd != IntPtr.Zero) {
+            if (MainStatus.hWnd != IntPtr.Zero) {
                 // Set the console window to be always on top
-                SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+                SetWindowPos(MainStatus.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
             }
             // end of window on top
+
+            DisableConsoleQuickEdit.Go();
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.Title = $"KeyCorrect @ v{MainStatus.VERSION} - By MP3Martin";
@@ -35,15 +37,19 @@
             }
 
             AlphabetNums = null;
-
+            // lowercase letters
             foreach (int index in Enumerable.Range(97, 122 - 97 + 1)) {
-                AlphabetCharactersAndMoreAsString.Add(((char)index).ToString());
+                SupportedCharacters.Add(((char)index).ToString());
             }
+            // uppercase letters
             foreach (int index in Enumerable.Range(65, 90 - 65 + 1)) {
-                AlphabetCharactersAndMoreAsString.Add(((char)index).ToString());
+                SupportedCharacters.Add(((char)index).ToString());
             }
-            foreach (string symbol in new List<string> { ".", ",", " " }) {
-                AlphabetCharactersAndMoreAsString.Add(symbol);
+            foreach (string symbol in new List<string> { "\n", "\r\n", "	", "\t" }) {
+                SupportedCharacters.Add(symbol);
+            }
+            foreach (char symbol in @" +ěščřžýáíé=úů()""'!?:_,.-=0123456789".ToCharArray()) {
+                SupportedCharacters.Add(symbol.ToString());
             }
         }
     }
