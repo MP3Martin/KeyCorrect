@@ -3,11 +3,12 @@
 namespace KeyCorrect {
     internal static class Util {
         internal static string EscapeString(string str) {
-            return FixInvisibleChars(str.EscapeMarkup()).Replace("\n", "╝").Replace("\t", "»").Replace("	", "»");
+            return FixSpecialChars(str.EscapeMarkup()).Replace("\n", "╝").Replace("\t", "»").Replace("	", "»");
         }
 
         internal static bool DoesStringOnlyContainSupportedCharacters(string input) {
             input = input.ToLower();
+            input = FixSpecialChars(input);
             foreach (string character in SupportedCharacters) {
                 input = input.Replace(character, "");
             }
@@ -22,12 +23,12 @@ namespace KeyCorrect {
             int RemoveFromTextToWrite = 1;
             string CodeToPress = MainStatus.TextToWrite[..1];
             try {
-                if (FixInvisibleChars(MainStatus.TextToWrite[..2]) == "\n" || FixInvisibleChars(MainStatus.TextToWrite[..2]) == "\t") {
+                if (FixSpecialChars(MainStatus.TextToWrite[..2]) == "\n" || FixSpecialChars(MainStatus.TextToWrite[..2]) == "\t") {
                     CodeToPress = MainStatus.TextToWrite[..2];
                     RemoveFromTextToWrite = 2;
                 }
             } catch (Exception) { }
-            CodeToPress = FixCzechKeyboardKeys(FixInvisibleChars(CodeToPress));
+            CodeToPress = FixCzechKeyboardKeys(FixSpecialChars(CodeToPress));
             bool PressSimpleLetter = false;
             MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
             bool CapsLockEnabled = Console.CapsLock;
@@ -264,8 +265,8 @@ namespace KeyCorrect {
 
         }
 
-        internal static string FixInvisibleChars(string input) {
-            return input.Replace("\r\n", "\n").Replace("	", "\t");
+        internal static string FixSpecialChars(string input) {
+            return input.Replace("\r\n", "\n").Replace("	", "\t").Replace("„", @"""").Replace("“", @"""");
         }
     }
 }
