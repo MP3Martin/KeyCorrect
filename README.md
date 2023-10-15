@@ -23,7 +23,6 @@ Intercept keyboard with correct characters<br><br>
 ## Example usage
 - You copy *"text"* to your clipboard
 - You launch this program
-- You press "Yes" when it asks for admin permission
 - You open notepad
 - You press the PageUp key
 - You type *"abcd"* on your keyboard, but the actual text that appeared in notepad was *"text"*

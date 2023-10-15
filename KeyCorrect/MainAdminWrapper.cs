@@ -12,7 +12,10 @@ namespace KeyCorrect {
                 return wp.IsInRole(WindowsBuiltInRole.Administrator);
             }
 
-            if (!IsRunAsAdministrator()) {
+            if (InputInterceptor.CheckDriverInstalled()) {
+                // the driver is already installed
+                RunMainProgram();
+            } else if (!IsRunAsAdministrator()) {
                 // It is not possible to launch a ClickOnce app as administrator directly, so instead we launch the
                 // app as administrator in a new process.
                 string SourcePath = Process.GetCurrentProcess().MainModule.FileName;
