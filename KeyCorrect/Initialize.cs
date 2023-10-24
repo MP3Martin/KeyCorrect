@@ -31,9 +31,15 @@
                 AlphabetNums.Add(i);
             }
 
-            // create a list of keycodes that represent the simple alphabet
+            // create a list of keycodes that represent the simple alphabet + some special characters
             foreach (int num in AlphabetNums) {
-                AlphabetKeyCodes.Add((KeyCode)num);
+                KeyStrokeTriggerKeyCodes.Add((KeyCode)num);
+            }
+            foreach (char character in new List<char> { '.', '.', '§', '/', '\'', '(', ')', ';', '\\', '?', '-', '+' }) {
+                KeyStrokeTriggerKeyCodes.Add((KeyCode)character);
+            }
+            foreach (KeyCode keyCode in new List<KeyCode> { KeyCode.OpenBracketBrace, KeyCode.CloseBracketBrace, KeyCode.Comma, KeyCode.Dot, KeyCode.Slash }) {
+                KeyStrokeTriggerKeyCodes.Add(keyCode);
             }
 
             AlphabetNums = null;

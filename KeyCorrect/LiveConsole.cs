@@ -25,6 +25,13 @@ namespace KeyCorrect {
                         return new Markup("");
                     }
 
+                    Markup InvisibleCharactersNote(string text) {
+                        if (text.Contains("╝") || text.Contains("»")) {
+                            return new Markup("[gold3]Note:[/] [lightsalmon3_1]Symbol \"╝\" means enter and \"»\" means tab. [/]");
+                        }
+                        return new Markup("");
+                    }
+
                     string textToWriteStableEscaped = EscapeString(TextToWrite);
                     // calculate how much of the text was already written
                     int textWrittenLen = EscapeString(MainStatus.TextToWriteStable).Length - EscapeString(MainStatus.TextToWrite).Length;
@@ -45,6 +52,8 @@ namespace KeyCorrect {
                         new Markup($"[gold3]Intercept writing:[/] " +
                         $"[{(MainStatus.Active ? "green" : "red")}]{(MainStatus.Active ? "active" : "inactive")}[/]"),
                         new Markup($"[gold3]Text to write:[/] [#9a6f32]{TextToWriteLeftPart}[/][darkorange]{TextToWriteRightPart}[/]"),
+                        new Markup(""),
+                        InvisibleCharactersNote(textToWriteStableEscaped),
                         new Markup(""),
                         UnsupportedCharWarning()
                     ));

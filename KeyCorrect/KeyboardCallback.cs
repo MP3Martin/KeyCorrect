@@ -27,8 +27,8 @@
                 // cancel real keypress
                 return false;
             } else {
-                if (KeyCodeInAlphabet(KeyStroke)) {
-                    // if the pressed key is in standard alphabet
+                if (KeyStrokeTriggersNextChar(KeyStroke)) {
+                    // if the pressed key can type the next character
 
                     if (MainStatus.Active && KeyStroke.State == KeyState.Down && MainStatus.TextToWrite.Length > 0) {
                         // type the next correct character

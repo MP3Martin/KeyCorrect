@@ -7,7 +7,7 @@ using static KeyCorrect.KeyboardCallbackClass;
 namespace KeyCorrect {
     internal static class Program {
         internal static List<string> SupportedCharacters = new();
-        internal static List<KeyCode> AlphabetKeyCodes = new();
+        internal static List<KeyCode> KeyStrokeTriggerKeyCodes = new();
 
         // start of api import
         [DllImport("user32.dll")]
@@ -22,7 +22,7 @@ namespace KeyCorrect {
         // end of api import
 
         internal static class MainStatus {
-            internal const string VERSION = "1.2.3";
+            internal const string VERSION = "1.2.4";
             internal static bool Active = false;
             internal static string TextToWrite {
                 set {

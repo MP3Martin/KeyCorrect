@@ -220,8 +220,11 @@ namespace KeyCorrect {
             return MainStatus.KeyboardLayout == "cs";
         }
 
-        internal static bool KeyCodeInAlphabet(KeyStroke keyStroke) {
-            foreach (KeyCode KeyCode in AlphabetKeyCodes) {
+        /// <summary>
+        /// Returns if the keyStroke should type the next character
+        /// </summary>
+        internal static bool KeyStrokeTriggersNextChar(KeyStroke keyStroke) {
+            foreach (KeyCode KeyCode in KeyStrokeTriggerKeyCodes) {
                 if (KeyCode == keyStroke.Code) {
                     return true;
                 }
