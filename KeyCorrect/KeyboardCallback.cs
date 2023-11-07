@@ -40,7 +40,7 @@
                     // interception is active but the key pressed was not in standard english alphabet
                     switch (KeyStroke.Code) {
                         case KeyCode.LeftWindowsKey or KeyCode.RightWindowsKey or KeyCode.Alt or KeyCode.Tab or
-                        KeyCode.Control or KeyCode.LeftShift or KeyCode.RightShift or KeyCode.Delete:
+                        KeyCode.Control or KeyCode.Delete:
                             return true;
                         default:
                             return false;

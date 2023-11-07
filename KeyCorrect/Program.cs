@@ -22,7 +22,7 @@ namespace KeyCorrect {
         // end of api import
 
         internal static class MainStatus {
-            internal const string VERSION = "1.2.4";
+            internal const string VERSION = "1.2.5";
             internal static bool Active = false;
             internal static string TextToWrite {
                 set {

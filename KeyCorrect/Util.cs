@@ -232,7 +232,7 @@ namespace KeyCorrect {
             return false;
         }
 
-        internal static Boolean InitializeDriver() {
+        internal static bool InitializeDriver() {
             if (InputInterceptor.CheckDriverInstalled()) {
                 //Console.WriteLine("Input interceptor seems to be installed.");
                 if (InputInterceptor.Initialize()) {
