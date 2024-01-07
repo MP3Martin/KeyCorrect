@@ -22,7 +22,7 @@ namespace KeyCorrect {
         // end of api import
 
         internal static class MainStatus {
-            internal const string VERSION = "1.2.6";
+            internal const string VERSION = "1.2.7";
             internal static bool Active = false;
             internal static string TextToWrite {
                 set {
@@ -35,7 +35,7 @@ namespace KeyCorrect {
             }
             private static string _textToWrite = "";
             /// <summary>
-            /// Like textToWrite but ony updates when active is False
+            /// Like TextToWrite but ony updates when active is False
             /// </summary>
             internal static string TextToWriteStable = "";
 
