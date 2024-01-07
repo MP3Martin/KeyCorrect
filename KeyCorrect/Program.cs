@@ -39,7 +39,6 @@ namespace KeyCorrect {
             /// </summary>
             internal static string TextToWriteStable = "";
 
-
             internal static KeyboardHook KeyboardHook;
 
             internal static bool IgnoreAllKeyPressesButStillSendThem = false;
