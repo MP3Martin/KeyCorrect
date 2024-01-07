@@ -51,7 +51,6 @@ namespace KeyCorrect {
             internal static string KeyboardLayout = "";
 
             internal static IntPtr hWnd;
-
         }
         public static void RunMainProgram() {
             Initialize.Run();

@@ -265,7 +265,6 @@ namespace KeyCorrect {
             });
             Timer.Interval = interval;
             Timer.Enabled = true;
-
         }
 
         internal static string FixSpecialChars(string input) {
