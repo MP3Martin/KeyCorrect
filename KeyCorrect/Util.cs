@@ -20,19 +20,7 @@ namespace KeyCorrect {
                 key = key.ToString();
                 MainStatus.KeyboardHook.SimulateInput(key.ToString(), 0, 1);
             }
-            int RemoveFromTextToWrite = 1;
-            string CodeToPress = MainStatus.TextToWrite[..1];
-            try {
-                if (FixSpecialChars(MainStatus.TextToWrite[..2]) == "\n" || FixSpecialChars(MainStatus.TextToWrite[..2]) == "\t") {
-                    CodeToPress = MainStatus.TextToWrite[..2];
-                    RemoveFromTextToWrite = 2;
-                }
-            } catch (Exception) { }
-            CodeToPress = FixCzechKeyboardKeys(FixSpecialChars(CodeToPress));
-            bool PressSimpleLetter = false;
-            MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
-            bool CapsLockEnabled = Console.CapsLock;
-            if (IsCzechKeyboardLayout()) {
+            object? SpecialKeysLookup(string CodeToPress, ref bool PressSimpleLetter) {
                 object? SpecialKeyToPress = null;
                 switch (CodeToPress.ToLower()) {
                     case "+":
@@ -184,6 +172,24 @@ namespace KeyCorrect {
                         PressSimpleLetter = true;
                         break;
                 }
+                return SpecialKeyToPress;
+            }
+            int RemoveFromTextToWrite = 1;
+            string CodeToPress = string.Empty;
+            try {
+                if (FixSpecialChars(MainStatus.TextToWrite[..2]) == "\n" || FixSpecialChars(MainStatus.TextToWrite[..2]) == "\t") {
+                    RemoveFromTextToWrite = 2;
+                }
+            } catch (Exception) { }
+            try {
+                CodeToPress = MainStatus.TextToWrite[..RemoveFromTextToWrite];
+            } catch (Exception) { }
+            CodeToPress = FixCzechKeyboardKeys(FixSpecialChars(CodeToPress));
+            bool PressSimpleLetter = false;
+            MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
+            bool CapsLockEnabled = Console.CapsLock;
+            if (IsCzechKeyboardLayout()) {
+                var SpecialKeyToPress = SpecialKeysLookup(CodeToPress, ref PressSimpleLetter);
                 if (SpecialKeyToPress != null) {
                     bool ShouldInvertCapsLock = CapsLockEnabled;
                     if (CodeToPress.ToUpper() == CodeToPress) ShouldInvertCapsLock = !ShouldInvertCapsLock;
@@ -201,7 +207,7 @@ namespace KeyCorrect {
             }
             if (PressSimpleLetter) {
                 if (CapsLockEnabled) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
-                MainStatus.KeyboardHook.SimulateInput(CodeToPress, 0, 1);
+                PressKey(CodeToPress);
                 if (CapsLockEnabled) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
             }
             MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
@@ -265,7 +271,6 @@ namespace KeyCorrect {
             });
             Timer.Interval = interval;
             Timer.Enabled = true;
-
         }
 
         internal static string FixSpecialChars(string input) {

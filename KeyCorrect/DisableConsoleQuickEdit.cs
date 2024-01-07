@@ -1,6 +1,5 @@
 ﻿// Thanks to https://stackoverflow.com/a/36720802
 
-
 using System.Runtime.InteropServices;
 
 namespace KeyCorrect {
@@ -20,7 +19,6 @@ namespace KeyCorrect {
         static extern bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
 
         internal static bool Go() {
-
             IntPtr consoleHandle = GetStdHandle(STD_INPUT_HANDLE);
 
             // get current console mode

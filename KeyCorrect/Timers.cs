@@ -11,13 +11,12 @@
                         if (ClipboardText == null) {
                             ClipboardText = string.Empty;
                         }
-                    } catch (Exception ex) {
+                    } catch (Exception) {
                         ClipboardText = string.Empty;
                     }
                     MainStatus.TextToWrite = ClipboardText;
                 }, 200);
             }
-
         }
 
         internal class KeyboardLayoutTimer {
