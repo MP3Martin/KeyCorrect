@@ -15,7 +15,7 @@ namespace KeyCorrect {
 
         [DllImport("user32.dll")]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        public static readonly IntPtr HWND_TOPMOST = new(-1);
         public const uint SWP_NOSIZE = 0x0001;
         public const uint SWP_NOMOVE = 0x0002;
         public const uint SWP_SHOWWINDOW = 0x0040;
@@ -61,11 +61,13 @@ namespace KeyCorrect {
                 // create live updating console text
                 LiveConsole.Run();
 
-                // Create a timer to get clipboard
+                #region timers
+                // Start a timer to get clipboard
                 Timers.ClipboardTimer.Start();
 
-                // Create a timer to get keyboard layout
+                // Start a timer to get keyboard layout
                 Timers.KeyboardLayoutTimer.Start();
+                #endregion
 
                 // loop until key to exit is pressed
                 char Key = '-';

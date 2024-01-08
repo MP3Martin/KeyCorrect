@@ -1,7 +1,7 @@
 ﻿namespace KeyCorrect {
     internal static class Initialize {
         internal static void Run() {
-            // start of window on top
+            #region WindowOnTop
             string GuidConsoleTitle = Guid.NewGuid().ToString();
             Console.Title = GuidConsoleTitle;
             Thread.Sleep(50);
@@ -13,14 +13,15 @@
                 // Set the console window to be always on top
                 SetWindowPos(MainStatus.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
             }
-            // end of window on top
+            #endregion
 
             DisableConsoleQuickEdit.Go();
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.Title = $"KeyCorrect @ v{MainStatus.VERSION} - By MP3Martin";
 
-            List<int>? AlphabetNums = new List<int> { 28, 57 }; // enter, space
+            #region AlphabetNums
+            List<int>? AlphabetNums = new() { 28, 57 }; // enter, space
             for (int i = 16; i <= 25; i++) {
                 AlphabetNums.Add(i); // q to p
             }
@@ -46,6 +47,9 @@
             }
 
             AlphabetNums = null;
+            #endregion
+
+            #region SupportedCharacters
             // lowercase letters
             foreach (int index in Enumerable.Range(97, 122 - 97 + 1)) {
                 SupportedCharacters.Add(((char)index).ToString());
@@ -60,6 +64,7 @@
             foreach (char symbol in @" +ěščřžýáíé=úů()/""'!?:_,.-=0123456789".ToCharArray()) {
                 SupportedCharacters.Add(symbol.ToString());
             }
+            #endregion
         }
     }
 }
