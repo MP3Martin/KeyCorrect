@@ -67,6 +67,24 @@ namespace KeyCorrect {
 
         #region SpecialKeysLookup
         private static object? SpecialKeysLookup(string CodeToPress, ref bool PressSimpleLetter) {
+            Action HandleNumbers = () => {
+                var NumberKeyCodePairs = new List<(string, KeyCode)> {
+                                ("1", KeyCode.One),
+                                ("2", KeyCode.Two),
+                                ("3", KeyCode.Three),
+                                ("4", KeyCode.Four),
+                                ("5", KeyCode.Five),
+                                ("6", KeyCode.Six),
+                                ("7", KeyCode.Seven),
+                                ("8", KeyCode.Eight),
+                                ("9", KeyCode.Nine),
+                                ("0", KeyCode.Zero),
+                            };
+                KeyCode KeyCodeNumberToPress = NumberKeyCodePairs.First(i => i.Item1 == CodeToPress).Item2;
+                MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                MainStatus.KeyboardHook.SimulateKeyPress(KeyCodeNumberToPress, 1);
+                MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+            };
             object? SpecialKeyToPress = null;
             switch (CodeToPress.ToLower()) {
                 case "+":
@@ -195,24 +213,7 @@ namespace KeyCorrect {
                     };
                     break;
                 case "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "0":
-                    SpecialKeyToPress = () => {
-                        var NumberKeyCodePairs = new List<(string, KeyCode)> {
-                                ("1", KeyCode.One),
-                                ("2", KeyCode.Two),
-                                ("3", KeyCode.Three),
-                                ("4", KeyCode.Four),
-                                ("5", KeyCode.Five),
-                                ("6", KeyCode.Six),
-                                ("7", KeyCode.Seven),
-                                ("8", KeyCode.Eight),
-                                ("9", KeyCode.Nine),
-                                ("0", KeyCode.Zero),
-                            };
-                        KeyCode KeyCodeNumberToPress = NumberKeyCodePairs.First(i => i.Item1 == CodeToPress).Item2;
-                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
-                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCodeNumberToPress, 1);
-                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
-                    };
+                    SpecialKeyToPress = HandleNumbers;
                     break;
                 default:
                     PressSimpleLetter = true;
