@@ -302,7 +302,7 @@ namespace KeyCorrect {
                     Timer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
                         try {
                             ToRun?.Invoke();
-                        } catch (ArithmeticException) { }
+                        } catch (Exception) { }
                     });
                     Timer.Interval = interval;
                     Timer.Enabled = true;
