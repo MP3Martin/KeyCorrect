@@ -69,7 +69,7 @@ namespace KeyCorrect {
 
                 // loop until key to exit is pressed
                 char Key = '-';
-                while (!(Char.ToLower(Key) == 'q' || Char.ToLower(Key) == 'x')) {
+                while (!(char.ToLower(Key) == 'q' || char.ToLower(Key) == 'x')) {
                     Key = Console.ReadKey(true).KeyChar;
                 }
                 MainStatus.KeyboardHook.Dispose();

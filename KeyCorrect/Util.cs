@@ -190,7 +190,7 @@ namespace KeyCorrect {
                     break;
                 case "1" or "2" or "3" or "4" or "5" or "6" or "7" or "8" or "9" or "0":
                     SpecialKeyToPress = () => {
-                        var NumberKeyCodePairs = new List<(String, KeyCode)> {
+                        var NumberKeyCodePairs = new List<(string, KeyCode)> {
                                 ("1", KeyCode.One),
                                 ("2", KeyCode.Two),
                                 ("3", KeyCode.Three),
