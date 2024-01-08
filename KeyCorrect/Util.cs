@@ -35,19 +35,7 @@ namespace KeyCorrect {
             MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
             bool CapsLockEnabled = Console.CapsLock;
             if (IsCzechKeyboardLayout()) {
-                var SpecialKeyToPress = SpecialKeysLookup(CodeToPress, ref PressSimpleLetter);
-                if (SpecialKeyToPress != null) {
-                    bool ShouldInvertCapsLock = CapsLockEnabled;
-                    if (CodeToPress.ToUpper() == CodeToPress) ShouldInvertCapsLock = !ShouldInvertCapsLock;
-
-                    if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
-                    if (SpecialKeyToPress is Action) {
-                        ((Action)SpecialKeyToPress)();
-                    } else {
-                        PressKey(SpecialKeyToPress);
-                    }
-                    if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
-                }
+                PressSimpleLetter = HandleCzechKeyboardLayout(CodeToPress, PressSimpleLetter, CapsLockEnabled, PressKey);
             } else {
                 PressSimpleLetter = true;
             }
@@ -58,6 +46,23 @@ namespace KeyCorrect {
             }
             MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
             MainStatus.TextToWrite = MainStatus.TextToWrite[RemoveFromTextToWrite..];
+        }
+
+        private static bool HandleCzechKeyboardLayout(string CodeToPress, bool PressSimpleLetter, bool CapsLockEnabled, Action<object> PressKey) {
+            var SpecialKeyToPress = SpecialKeysLookup(CodeToPress, ref PressSimpleLetter);
+            if (SpecialKeyToPress != null) {
+                bool ShouldInvertCapsLock = CapsLockEnabled;
+                if (CodeToPress.ToUpper() == CodeToPress) ShouldInvertCapsLock = !ShouldInvertCapsLock;
+
+                if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
+                if (SpecialKeyToPress is Action) {
+                    ((Action)SpecialKeyToPress)();
+                } else {
+                    PressKey(SpecialKeyToPress);
+                }
+                if (ShouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
+            }
+            return PressSimpleLetter;
         }
 
         private static object? SpecialKeysLookup(string CodeToPress, ref bool PressSimpleLetter) {
