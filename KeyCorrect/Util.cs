@@ -86,6 +86,148 @@ namespace KeyCorrect {
                 MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
             };
             object? SpecialKeyToPress = null;
+            Dictionary<string, object> symbolKeyPairs = new() {
+                { "+", 1 },
+                { "ě", 2 },
+                { "š", 3 },
+                { "č", 4 },
+                { "ř", 5 },
+                { "ž", 6 },
+                { "ý", 7 },
+                { "á", 8 },
+                { "í", 9 },
+                { "é", 0 },
+                {
+                    "ď", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.D);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.D);
+                    }
+                },
+                {
+                    "ň", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.N);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.N);
+                    }
+                },
+                {
+                    "ó", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.O);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.O);
+                    }
+                },
+                {
+                    "ť", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Equals);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.T);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.T);
+                    }
+                },
+                {
+                    "ú", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.OpenBracketBrace, 1);
+                    }
+                },
+                {
+                    "ů", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Semicolon, 1);
+                    }
+                },
+                {
+                    "\n", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Enter, 1);
+                    }
+                },
+                {
+                    "\t", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Tab, 1);
+                    }
+                },
+                {
+                    "=", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Dash, 1);
+                    }
+                },
+                {
+                    "?", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Comma, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                },
+                {
+                    "", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Dot, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                },
+                {
+                    "_", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Slash, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                },
+                {
+                    "!", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Apostrophe, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                },
+                {
+                    "\"", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Semicolon, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                },
+                {
+                    "(", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CloseBracketBrace, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                },
+                {
+                    ")", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CloseBracketBrace, 1);
+                    }
+                },
+                {
+                    "/", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.OpenBracketBrace, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                },
+                {
+                    "-", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Slash, 1);
+                    }
+                },
+                {
+                    "'", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Backslash, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                }
+          };
+
             switch (CodeToPress.ToLower()) {
                 case "+":
                     SpecialKeyToPress = 1;
