@@ -86,7 +86,7 @@ namespace KeyCorrect {
                 MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
             };
             object? SpecialKeyToPress = null;
-            Dictionary<string, object> string_KeyToPress_Pairs = new() {
+            Dictionary<string, object> string_SpecialKeyToPress_Pairs = new() {
                 { "+", 1 },
                 { "ě", 2 },
                 { "š", 3 },
@@ -235,8 +235,8 @@ namespace KeyCorrect {
                 }
             };
 
-            if (string_KeyToPress_Pairs.ContainsKey(CodeToPress)) {
-                SpecialKeyToPress = string_KeyToPress_Pairs[CodeToPress];
+            if (string_SpecialKeyToPress_Pairs.ContainsKey(CodeToPress)) {
+                SpecialKeyToPress = string_SpecialKeyToPress_Pairs[CodeToPress];
             } else if (new[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" }.Contains(CodeToPress)) {
                 SpecialKeyToPress = HandleNumbers;
             } else {
