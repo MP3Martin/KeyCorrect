@@ -295,16 +295,6 @@ namespace KeyCorrect {
             }
         }
 
-        internal static System.Timers.Timer CreateClassicTimer(Action function, int interval) {
-            System.Timers.Timer Timer = new();
-            Timer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
-                function();
-            });
-            Timer.Interval = interval;
-            Timer.Enabled = true;
-            return Timer;
-        }
-
         internal class MyTimer {
             public MyTimer(Action toRun, int interval) {
                 Start = () => {
