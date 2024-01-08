@@ -1,30 +1,21 @@
 ﻿namespace KeyCorrect {
     internal static class Timers {
-        internal class ClipboardTimer {
-            internal static void Start() {
-                CreateTimer(() => {
-                    if (MainStatus.Active) {
-                        return;
-                    }
-                    string ClipboardText = TextCopy.ClipboardService.GetText();
-                    try {
-                        if (ClipboardText == null) {
-                            ClipboardText = string.Empty;
-                        }
-                    } catch (Exception) {
-                        ClipboardText = string.Empty;
-                    }
-                    MainStatus.TextToWrite = ClipboardText;
-                }, 200);
+        internal static readonly MyTimer ClipboardTimer = new(() => {
+            if (MainStatus.Active) {
+                return;
             }
-        }
+            string? ClipboardText;
+            try {
+                ClipboardText = TextCopy.ClipboardService.GetText();
+                ClipboardText ??= string.Empty;
+            } catch (Exception) {
+                ClipboardText = string.Empty;
+            }
+            MainStatus.TextToWrite = ClipboardText;
+        }, 150);
 
-        internal class KeyboardLayoutTimer {
-            internal static void Start() {
-                CreateTimer(() => {
-                    MainStatus.KeyboardLayout = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToLower();
-                }, 1 * 1000);
-            }
-        }
+        internal static readonly MyTimer KeyboardLayoutTimer = new(() => {
+            MainStatus.KeyboardLayout = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToLower();
+        }, 1000);
     }
 }

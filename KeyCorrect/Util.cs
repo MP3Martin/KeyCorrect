@@ -65,6 +65,7 @@ namespace KeyCorrect {
             return PressSimpleLetter;
         }
 
+        #region SpecialKeysLookup
         private static object? SpecialKeysLookup(string CodeToPress, ref bool PressSimpleLetter) {
             object? SpecialKeyToPress = null;
             switch (CodeToPress.ToLower()) {
@@ -219,6 +220,7 @@ namespace KeyCorrect {
             }
             return SpecialKeyToPress;
         }
+        #endregion
 
         internal static string FixCzechKeyboardKeys(string input) {
             if (IsCzechKeyboardLayout()) {
@@ -270,13 +272,38 @@ namespace KeyCorrect {
             }
         }
 
-        internal static void CreateTimer(Action function, int interval) {
-            System.Timers.Timer Timer = new System.Timers.Timer();
+        internal static System.Timers.Timer CreateClassicTimer(Action function, int interval) {
+            System.Timers.Timer Timer = new();
             Timer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
                 function();
             });
             Timer.Interval = interval;
             Timer.Enabled = true;
+            return Timer;
+        }
+
+        internal class MyTimer {
+            public MyTimer(Action toRun, int interval) {
+                Start = () => {
+                    Timer = new System.Timers.Timer();
+                    Timer.Elapsed += new System.Timers.ElapsedEventHandler((source, e) => {
+                        try {
+                            ToRun?.Invoke();
+                        } catch (ArithmeticException) { }
+                    });
+                    Timer.Interval = interval;
+                    Timer.Enabled = true;
+                };
+
+                ToRun = toRun;
+            }
+            public Action Start;
+            public Action ToRun;
+            public System.Timers.Timer Timer = new();
+            public int Interval {
+                get => (int)Timer.Interval;
+                set => Timer.Interval = value;
+            }
         }
 
         internal static string FixSpecialChars(string input) {

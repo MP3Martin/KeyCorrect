@@ -56,6 +56,15 @@
             if (KeyStroke.State == KeyState.Up) {
                 // toggle active state
                 MainStatus.Active = !MainStatus.Active;
+
+                // Update MainStatus.TextToWrite with clipboard text right when KeyCorrect is disabled (because
+                // the first character of MainStatus.TextToWrite is removed every time a character is typed)
+                if (!MainStatus.Active) {
+                    // First set MainStatus.TextToWrite to last stable text just to be sure
+                    MainStatus.TextToWrite = MainStatus.TextToWriteStable;
+                    // text from clipboard
+                    Timers.ClipboardTimer.ToRun.Invoke();
+                }
             }
 
             // cancel real keypress
