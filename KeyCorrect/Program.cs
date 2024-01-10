@@ -9,7 +9,7 @@ namespace KeyCorrect {
         internal static List<string> SupportedCharacters = new();
         internal static List<KeyCode> KeyStrokeTriggerKeyCodes = new();
 
-        // start of api import
+        #region ApiImport
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
@@ -19,10 +19,10 @@ namespace KeyCorrect {
         public const uint SWP_NOSIZE = 0x0001;
         public const uint SWP_NOMOVE = 0x0002;
         public const uint SWP_SHOWWINDOW = 0x0040;
-        // end of api import
+        #endregion
 
         internal static class MainStatus {
-            internal const string VERSION = "1.2.7";
+            internal const string VERSION = "1.2.8";
             internal static bool Active = false;
             internal static string TextToWrite {
                 set {
