@@ -11,6 +11,8 @@ Intercept keyboard with correct characters<br><br>
 - Only for Windows x64
 - Build on top of [this example](https://github.com/0x2E757/InputInterceptor#example-application) thanks to [@oblitum](https://github.com/oblitum) and [@0x2E757](https://github.com/0x2E757)
 - **⚠️ Use at own risk ⚠️**, you chose to use this software
+- The driver this software uses might **prevent games** like Forza Horizon 5 **from launching**! (because of an anti-cheat that detects the keyboard driver)
+*(This software is not affiliated with or endorsed by the developers or publishers of Forza games.)*
 
 ## First use
 1. Download the latest installer from [releases](https://github.com/MP3Martin/KeyCorrect/releases/latest) or build it from source using .NET 6
