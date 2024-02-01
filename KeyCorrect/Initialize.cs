@@ -61,7 +61,7 @@
             foreach (string symbol in new List<string> { "\n", "\r\n", "	", "\t" }) {
                 SupportedCharacters.Add(symbol);
             }
-            foreach (char symbol in @" +ěščřžýáíé=úů()/""'!?:_,.-=0123456789".ToCharArray()) {
+            foreach (char symbol in @" +ěščřžýáíé=úů()/""'!?$§:_,.-=0123456789".ToCharArray()) {
                 SupportedCharacters.Add(symbol.ToString());
             }
             #endregion

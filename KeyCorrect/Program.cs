@@ -22,7 +22,7 @@ namespace KeyCorrect {
         #endregion
 
         internal static class MainStatus {
-            internal const string VERSION = "1.2.8";
+            internal const string VERSION = "1.2.9";
             internal static bool Active = false;
             internal static string TextToWrite {
                 set {

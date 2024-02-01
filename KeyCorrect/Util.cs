@@ -232,6 +232,20 @@ namespace KeyCorrect {
                         MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Dot, 1);
                         MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
                     }
+                },
+                {
+                    "§", () => {
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Apostrophe, 1);
+                    }
+                },
+                {
+                    "$", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Control);
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.Alt);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Semicolon, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Alt);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.Control);
+                    }
                 }
             };
 
