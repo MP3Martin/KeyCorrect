@@ -132,8 +132,15 @@ $RECYCLE.BIN/
 
 _NCrunch*
 
+# Rider
+# Rider auto-generates .iml files, and contentModel.xml
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
 # Custom
 .vs/
+.idea/
 !/ClickOnce/
 !/ClickOnce/**/*
 !/KeyCorrect/Properties/PublishProfiles/**/*.pubxml

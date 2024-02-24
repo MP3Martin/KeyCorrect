@@ -1,17 +1,20 @@
-﻿namespace KeyCorrect {
+﻿using TextCopy;
+
+namespace KeyCorrect {
     internal static class Timers {
         internal static readonly MyTimer ClipboardTimer = new(() => {
             if (MainStatus.Active) {
                 return;
             }
-            string? ClipboardText;
+            string? clipboardText;
             try {
-                ClipboardText = TextCopy.ClipboardService.GetText();
-                ClipboardText ??= string.Empty;
-            } catch (Exception) {
-                ClipboardText = string.Empty;
+                clipboardText = ClipboardService.GetText();
+                clipboardText ??= string.Empty;
             }
-            MainStatus.TextToWrite = ClipboardText;
+            catch {
+                clipboardText = string.Empty;
+            }
+            MainStatus.TextToWrite = clipboardText;
         }, 150);
 
         internal static readonly MyTimer KeyboardLayoutTimer = new(() => {

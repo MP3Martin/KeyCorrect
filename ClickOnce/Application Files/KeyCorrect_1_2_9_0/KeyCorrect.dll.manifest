@@ -15,16 +15,16 @@
       </applicationRequestMinimum>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
         <!--
-          UAC Manifest Options
-          If you want to change the Windows User Account Control level replace the
-          requestedExecutionLevel node with one of the following.
+          Možnosti manifestu UAC
+          Chcete-li změnit úroveň řízení uživatelských účtů v systému Windows, nahraďte 
+          uzel requestedExecutionLevel jedním z následujících.
 
         <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
         <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
         <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
 
-         If you want to utilize File and Registry Virtualization for backward
-         compatibility then delete the requestedExecutionLevel node.
+         Chcete-li využít virtualizaci souborů a registru pro zpětnou 
+         kompatibilitu, odstraňte uzel requestedExecutionLevel.
     -->
         <requestedExecutionLevel level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
@@ -54,13 +54,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="KeyCorrect.exe" size="2719052">
+  <file name="KeyCorrect.exe" size="2721612">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>zptto8ven46s7w4j1ruc8YFyqgSdS2dis6jAcS1/9VA=</dsig:DigestValue>
+      <dsig:DigestValue>rLLZsvK9biCtv9T8jVxqriMduVBWYvPk2hNgqmLNsdQ=</dsig:DigestValue>
     </hash>
   </file>
   <file name="KeyCorrect.ico" size="140206">

@@ -1,70 +1,75 @@
-﻿namespace KeyCorrect {
+﻿using System.Diagnostics;
+using System.Text;
+
+namespace KeyCorrect {
     internal static class Initialize {
         internal static void Run() {
+
             #region WindowOnTop
-            string GuidConsoleTitle = Guid.NewGuid().ToString();
-            Console.Title = GuidConsoleTitle;
+            var guidConsoleTitle = Guid.NewGuid().ToString();
+            Console.Title = guidConsoleTitle;
             Thread.Sleep(50);
-            MainStatus.hWnd = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
-            MainStatus.hWnd = FindWindow(null, Console.Title);
+            MainStatus.HWnd = Process.GetCurrentProcess().MainWindowHandle;
+#pragma warning disable CA1416
+            MainStatus.HWnd = FindWindow(null, Console.Title);
+#pragma warning restore CA1416
             Thread.Sleep(50);
 
-            if (MainStatus.hWnd != IntPtr.Zero) {
+            if (MainStatus.HWnd != IntPtr.Zero) {
                 // Set the console window to be always on top
-                SetWindowPos(MainStatus.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+                SetWindowPos(MainStatus.HWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
             }
             #endregion
 
             DisableConsoleQuickEdit.Go();
 
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.Title = $"KeyCorrect @ v{MainStatus.VERSION} - By MP3Martin";
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.Title = $"KeyCorrect @ v{MainStatus.Version} - By MP3Martin";
 
             #region AlphabetNums
-            List<int>? AlphabetNums = new() { 28, 57 }; // enter, space
-            for (int i = 16; i <= 25; i++) {
-                AlphabetNums.Add(i); // q to p
+            List<int> alphabetNums = new() { 28, 57 }; // enter, space
+            for (var i = 16; i <= 25; i++) {
+                alphabetNums.Add(i); // q to p
             }
-            for (int i = 30; i <= 38; i++) {
-                AlphabetNums.Add(i); // a to l
+            for (var i = 30; i <= 38; i++) {
+                alphabetNums.Add(i); // a to l
             }
-            for (int i = 44; i <= 50; i++) {
-                AlphabetNums.Add(i); // z to m
+            for (var i = 44; i <= 50; i++) {
+                alphabetNums.Add(i); // z to m
             }
-            for (int i = 2; i <= 11; i++) {
-                AlphabetNums.Add(i); // numbers from 0 to 9
+            for (var i = 2; i <= 11; i++) {
+                alphabetNums.Add(i); // numbers from 0 to 9
             }
 
             // create a list of keycodes that represent the simple alphabet + some special characters
-            foreach (int num in AlphabetNums) {
+            foreach (var num in alphabetNums) {
                 KeyStrokeTriggerKeyCodes.Add((KeyCode)num);
             }
-            foreach (char character in new List<char> { '.', '.', '§', '/', '\'', '(', ')', ';', '\\', '?', '-', '+' }) {
+            foreach (var character in new List<char> { '.', '.', '§', '/', '\'', '(', ')', ';', '\\', '?', '-', '+' }) {
                 KeyStrokeTriggerKeyCodes.Add((KeyCode)character);
             }
-            foreach (KeyCode keyCode in new List<KeyCode> { KeyCode.OpenBracketBrace, KeyCode.CloseBracketBrace, KeyCode.Comma, KeyCode.Dot, KeyCode.Slash }) {
+            foreach (var keyCode in new List<KeyCode> { KeyCode.OpenBracketBrace, KeyCode.CloseBracketBrace, KeyCode.Comma, KeyCode.Dot, KeyCode.Slash }) {
                 KeyStrokeTriggerKeyCodes.Add(keyCode);
             }
-
-            AlphabetNums = null;
             #endregion
 
             #region SupportedCharacters
             // lowercase letters
-            foreach (int index in Enumerable.Range(97, 122 - 97 + 1)) {
+            foreach (var index in Enumerable.Range(97, 122 - 97 + 1)) {
                 SupportedCharacters.Add(((char)index).ToString());
             }
             // uppercase letters
-            foreach (int index in Enumerable.Range(65, 90 - 65 + 1)) {
+            foreach (var index in Enumerable.Range(65, 90 - 65 + 1)) {
                 SupportedCharacters.Add(((char)index).ToString());
             }
-            foreach (string symbol in new List<string> { "\n", "\r\n", "	", "\t" }) {
+            foreach (var symbol in new List<string> { "\n", "\r\n", "	", "\t" }) {
                 SupportedCharacters.Add(symbol);
             }
-            foreach (char symbol in @" +ěščřžýáíé=úů()/""'!?$§:_,.-=0123456789".ToCharArray()) {
+            foreach (var symbol in @" +ěščřžďťňýáíéó=úů()/""'!?$§:_,.-=0123456789".ToCharArray()) {
                 SupportedCharacters.Add(symbol.ToString());
             }
             #endregion
+
         }
     }
 }

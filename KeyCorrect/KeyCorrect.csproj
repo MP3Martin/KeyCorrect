@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <ApplicationIcon>KeyCorrect.ico</ApplicationIcon>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <PlatformName>windows</PlatformName>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <ApplicationIcon>KeyCorrect.ico</ApplicationIcon>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="KeyCorrect.ico" />
-  </ItemGroup>
+    <ItemGroup>
+        <Content Include="KeyCorrect.ico"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MP3Martin.InputInterceptor.PersonalFork" Version="1.0.1" />
-    <PackageReference Include="Spectre.Console" Version="0.47.0" />
-    <PackageReference Include="TextCopy" Version="6.2.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MP3Martin.InputInterceptor.PersonalFork" Version="1.0.1"/>
+        <PackageReference Include="Spectre.Console" Version="0.47.0"/>
+        <PackageReference Include="TextCopy" Version="6.2.1"/>
+    </ItemGroup>
 
 </Project>
