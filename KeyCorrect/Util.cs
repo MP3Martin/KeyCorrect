@@ -144,6 +144,12 @@ namespace KeyCorrect {
                         MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
                     }
                 }, {
+                    "%", () => {
+                        MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
+                        MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Dash, 1);
+                        MainStatus.KeyboardHook.SimulateKeyUp(KeyCode.LeftShift);
+                    }
+                }, {
                     "", () => {
                         MainStatus.KeyboardHook.SimulateKeyDown(KeyCode.LeftShift);
                         MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.Dot, 1);
