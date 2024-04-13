@@ -10,7 +10,7 @@ Intercept keyboard with correct characters<br><br>
 - **Czech QWERTZ keyboard layout** has special support for some characters like "ů", "ž", "-", ...
 - Only for Windows x64
 - Build on top of [this example](https://github.com/0x2E757/InputInterceptor#example-application) thanks to [@oblitum](https://github.com/oblitum) and [@0x2E757](https://github.com/0x2E757)
-- **⚠️ Use at own risk ⚠️**, you chose to use this software
+- **⚠️ Use at own risk ⚠️**, you choose to use this software
 - The driver this software uses might **prevent games** like Forza Horizon 5 **from launching**! (because of an anti-cheat that detects the keyboard driver)
 *(This software is not affiliated with or endorsed by the developers or publishers of Forza games.)*
 
