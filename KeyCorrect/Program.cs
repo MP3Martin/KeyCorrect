@@ -47,7 +47,7 @@ namespace KeyCorrect {
         }
 
         internal static class MainStatus {
-            internal const string Version = "1.3.2";
+            internal const string Version = "1.3.3";
             internal static bool Active = false;
             private static string _textToWrite = "";
 
