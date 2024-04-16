@@ -31,12 +31,15 @@ namespace KeyCorrect {
             for (var i = 16; i <= 25; i++) {
                 alphabetNums.Add(i); // q to p
             }
+
             for (var i = 30; i <= 38; i++) {
                 alphabetNums.Add(i); // a to l
             }
+
             for (var i = 44; i <= 50; i++) {
                 alphabetNums.Add(i); // z to m
             }
+
             for (var i = 2; i <= 11; i++) {
                 alphabetNums.Add(i); // numbers from 0 to 9
             }
@@ -45,9 +48,11 @@ namespace KeyCorrect {
             foreach (var num in alphabetNums) {
                 KeyStrokeTriggerKeyCodes.Add((KeyCode)num);
             }
+
             foreach (var character in new List<char> { '.', '.', '§', '/', '\'', '(', ')', ';', '\\', '?', '-', '+' }) {
                 KeyStrokeTriggerKeyCodes.Add((KeyCode)character);
             }
+
             foreach (var keyCode in new List<KeyCode> { KeyCode.OpenBracketBrace, KeyCode.CloseBracketBrace, KeyCode.Comma, KeyCode.Dot, KeyCode.Slash }) {
                 KeyStrokeTriggerKeyCodes.Add(keyCode);
             }
@@ -58,13 +63,16 @@ namespace KeyCorrect {
             foreach (var index in Enumerable.Range(97, 122 - 97 + 1)) {
                 SupportedCharacters.Add(((char)index).ToString());
             }
+
             // uppercase letters
             foreach (var index in Enumerable.Range(65, 90 - 65 + 1)) {
                 SupportedCharacters.Add(((char)index).ToString());
             }
+
             foreach (var symbol in new List<string> { "\n", "\r\n", "	", "\t" }) {
                 SupportedCharacters.Add(symbol);
             }
+
             foreach (var symbol in @" +ěščřžďťňýáíéó=úů()/""'!?%$§:_,.-=0123456789".ToCharArray()) {
                 SupportedCharacters.Add(symbol.ToString());
             }

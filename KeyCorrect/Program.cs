@@ -21,9 +21,6 @@ namespace KeyCorrect {
                 #region timers
                 // Start a timer to get clipboard
                 Timers.ClipboardTimer.Start();
-
-                // Start a timer to get keyboard layout
-                Timers.KeyboardLayoutTimer.Start();
                 #endregion
 
                 // loop until key to exit is pressed
@@ -31,6 +28,7 @@ namespace KeyCorrect {
                 while (!(char.ToLower(key) == 'q' || char.ToLower(key) == 'x')) {
                     key = Console.ReadKey(true).KeyChar;
                 }
+
                 MainStatus.KeyboardHook.Dispose();
                 MainStatus.ShouldClearConsole = true;
                 Console.Clear();
@@ -43,12 +41,13 @@ namespace KeyCorrect {
             if (MainStatus.ShouldClearConsole) {
                 Console.Clear();
             }
+
             Console.WriteLine("\nProgram ended. Press any key to close this window.");
             Console.ReadKey(true);
         }
 
         internal static class MainStatus {
-            internal const string Version = "1.3.1";
+            internal const string Version = "1.3.2";
             internal static bool Active = false;
             private static string _textToWrite = "";
 
@@ -65,7 +64,7 @@ namespace KeyCorrect {
 
             internal static bool ShouldClearConsole;
 
-            internal static string KeyboardLayout = "";
+            internal static readonly string KeyboardLayout = InputLanguage.CurrentInputLanguage.Culture.TwoLetterISOLanguageName.ToLower();
 
             internal static IntPtr HWnd;
             internal static string TextToWrite {

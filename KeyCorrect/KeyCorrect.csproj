@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net6.0-windows</TargetFramework>
         <PlatformName>windows</PlatformName>
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UseWindowsForms>true</UseWindowsForms>
         <Nullable>enable</Nullable>
         <ApplicationIcon>KeyCorrect.ico</ApplicationIcon>
     </PropertyGroup>
@@ -14,8 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="MP3Martin.InputInterceptor.PersonalFork" Version="1.0.2" />
-        <PackageReference Include="Spectre.Console" Version="0.47.0" />
+        <PackageReference Include="MP3Martin.InputInterceptor.PersonalFork" Version="1.0.2"/>
+        <PackageReference Include="Spectre.Console" Version="0.47.0"/>
         <PackageReference Include="TextCopy" Version="6.2.1"/>
     </ItemGroup>
 

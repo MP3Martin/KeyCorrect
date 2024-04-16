@@ -18,6 +18,7 @@ namespace KeyCorrect {
                 if (sourcePath!.EndsWith(".dll")) {
                     sourcePath = sourcePath[..^4] + ".exe";
                 }
+
                 var processInfo = new ProcessStartInfo(sourcePath) {
                     // The following properties run the new process as administrator
                     UseShellExecute = true,
@@ -27,8 +28,7 @@ namespace KeyCorrect {
                 // Start the new process
                 try {
                     Process.Start(processInfo);
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     // The user did not allow the application to run as administrator
                     Console.WriteLine("Sorry, this application must be run as Administrator because of the keyboard driver. Error code:\n");
                     Console.WriteLine(ex);
@@ -42,6 +42,7 @@ namespace KeyCorrect {
                 // We are running as administrator
                 RunMainProgram();
             }
+
             return;
 
             bool IsRunAsAdministrator() {

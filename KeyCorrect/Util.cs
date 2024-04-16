@@ -16,6 +16,7 @@ namespace KeyCorrect {
             foreach (var character in SupportedCharacters) {
                 input = input.Replace(character, "");
             }
+
             return input.Replace("\n", "").Replace("\r", "").Replace(Environment.NewLine, "") == "";
         }
 
@@ -26,16 +27,16 @@ namespace KeyCorrect {
                 if (FixSpecialChars(MainStatus.TextToWrite[..2]) == "\n" || FixSpecialChars(MainStatus.TextToWrite[..2]) == "\t") {
                     removeFromTextToWrite = 2;
                 }
-            }
-            catch {
+            } catch {
                 // ignored
             }
+
             try {
                 codeToPress = MainStatus.TextToWrite[..removeFromTextToWrite];
-            }
-            catch {
+            } catch {
                 // ignored
             }
+
             codeToPress = FixCzechKeyboardKeys(FixSpecialChars(codeToPress));
             var pressSimpleLetter = false;
             MainStatus.IgnoreAllKeyPressesButStillSendThem = true;
@@ -46,6 +47,7 @@ namespace KeyCorrect {
                 PressKey(codeToPress);
                 if (capsLockEnabled) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
             }
+
             MainStatus.IgnoreAllKeyPressesButStillSendThem = false;
             MainStatus.TextToWrite = MainStatus.TextToWrite[removeFromTextToWrite..];
             return;
@@ -66,6 +68,7 @@ namespace KeyCorrect {
             } else {
                 pressKey(specialKeyToPress);
             }
+
             if (shouldInvertCapsLock) MainStatus.KeyboardHook.SimulateKeyPress(KeyCode.CapsLock, 1);
             return pressSimpleLetter;
         }
@@ -227,6 +230,7 @@ namespace KeyCorrect {
             } else {
                 pressSimpleLetter = true;
             }
+
             return specialKeyToPress;
 
             void HandleNumbers() {
@@ -275,6 +279,7 @@ namespace KeyCorrect {
                     return true;
                 }
             }
+
             Console.WriteLine("Input interceptor initialization failed.");
             return false;
         }
@@ -303,8 +308,7 @@ namespace KeyCorrect {
                     _timer.Elapsed += (_, _) => {
                         try {
                             ToRun?.Invoke();
-                        }
-                        catch {
+                        } catch {
                             // ignored
                         }
                     };

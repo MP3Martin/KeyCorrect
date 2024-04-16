@@ -1,4 +1,6 @@
 ﻿using Spectre.Console;
+using Color = Spectre.Console.Color;
+using Panel = Spectre.Console.Panel;
 
 namespace KeyCorrect {
     internal static class LiveConsole {
@@ -11,6 +13,7 @@ namespace KeyCorrect {
                             Console.Clear();
                             return;
                         }
+
                         const int maxShownTextToWriteLen = 60;
                         var textToWrite = MainStatus.TextToWriteStable;
                         if (textToWrite.Length > maxShownTextToWriteLen) {
@@ -23,6 +26,7 @@ namespace KeyCorrect {
                                 return new("[gold3]Warning:[/] [indianred1]This program only supports typing english " +
                                     "letters!\nBut there is a special support for Czech QWERTZ layout.[/]");
                             }
+
                             return new("");
                         }
 
@@ -30,6 +34,7 @@ namespace KeyCorrect {
                             if (text.Contains('╝') || text.Contains('»')) {
                                 return new("[gold3]Note:[/] [lightsalmon3_1]Symbol \"╝\" means enter and \"»\" means tab. [/]");
                             }
+
                             return new("");
                         }
                         #endregion
@@ -41,14 +46,13 @@ namespace KeyCorrect {
                         string textToWriteRightPart;
                         try {
                             textToWriteLeftPart = $"{textToWriteStableEscaped[..Math.Max(0, textWrittenLen)]}";
-                        }
-                        catch {
+                        } catch {
                             textToWriteLeftPart = textToWriteStableEscaped;
                         }
+
                         try {
                             textToWriteRightPart = $"{textToWriteStableEscaped[Math.Max(0, textWrittenLen)..]}";
-                        }
-                        catch {
+                        } catch {
                             textToWriteRightPart = "";
                         }
 

@@ -11,19 +11,23 @@ namespace KeyCorrect {
                 // allow the keypress but don't handle it
                 return true;
             }
+
             // Check if pageUp is pressed
             if (!Console.NumberLock && keyStroke.Code == Numpad9 ||
                 keyStroke is { Code: Numpad9, State: E0 or (E0 | KeyState.Up) }) {
                 return HandleNumLockPress(ref keyStroke);
             }
+
             if (HandleNonNumLockPress(keyStroke) is { } forwardKeyStroke) {
                 return forwardKeyStroke;
             }
+
             // ReSharper disable once ConvertIfStatementToReturnStatement
             if (MainStatus.TextToWrite.Length <= 0 && MainStatus.Active) {
                 // cancel the keypress if done writing
                 return false;
             }
+
             // allow the keypress by default
             return true;
         }
@@ -41,10 +45,11 @@ namespace KeyCorrect {
             } else if (MainStatus.Active) {
                 // interception is active but the key pressed was not in standard english alphabet
                 return keyStroke.Code switch {
-                    LeftWindowsKey or RightWindowsKey or Alt or Tab or Control or Delete => true,
+                    LeftWindowsKey or RightWindowsKey or Alt or Tab or KeyCode.Control or Delete => true,
                     _ => false
                 };
             }
+
             return null;
         }
 
